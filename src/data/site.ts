@@ -25,7 +25,7 @@ export const site = {
   // Vacío = los formularios solo abren WhatsApp con el mensaje listo.
   formEndpoint: '',
   // Plataforma pública de Precios Claros
-  preciosClarosUrl: 'https://datacrazyy.github.io/price-intelligence-backend/',
+  preciosClarosUrl: 'https://preciosclaros.techprometeo.com/',
   // Archivo de la propuesta comercial dentro de /public
   // Tiempo de respuesta que prometemos en el formulario de contacto
   responseTime: 'durante el día',
