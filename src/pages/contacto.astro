@@ -1,0 +1,266 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { site, waLink } from '../data/site';
+
+const topics = [
+  { key: 'consulting', icon: 'chart', label: 'Proyecto de BI', hint: 'Dashboards, automatización, integración' },
+  { key: 'academy', icon: 'graduation', label: 'Curso o capacitación', hint: 'Para mí, mi equipo o institución' },
+  { key: 'precio', icon: 'tag', label: 'Precio Justo', hint: 'Demo o datos de precios' },
+  { key: 'talks', icon: 'mic', label: 'Talks o evento', hint: 'Charlas, alianzas, proponer un tema' },
+  { key: 'otro', icon: 'sparkles', label: 'Otro', hint: 'Cuéntanos qué necesitas' },
+] as const;
+const plans: Record<string, string> = { horas: 'Desarrollo por horas', proyecto: 'Implementación de proyecto', soporte: 'Soporte mensual' };
+const sources = ['LinkedIn', 'Recomendación', 'Google', 'Un curso o evento', 'Instagram / Facebook', 'Otro'];
+---
+<Base title="Contacto y reuniones" description="Escríbele a Prometeo o agenda una reunión: proyectos de Business Intelligence, cursos de Power BI, Precio Justo o eventos. Respondemos durante el día.">
+  <section class="page-hero c-hero" aria-labelledby="h">
+    <div class="container">
+      <p class="badge-line"><Icon name="message" />Contacto</p>
+      <h1 id="h" data-split>Hablemos de lo que <span class="gradient-text">necesitas</span></h1>
+      <p class="lead reveal">Déjanos tus datos, elige si prefieres una reunión y te respondemos {site.responseTime}.</p>
+    </div>
+  </section>
+
+  <section class="section c-body">
+    <div class="container c-grid">
+      <form class="form card" data-contact novalidate data-plans={JSON.stringify(plans)}>
+        <fieldset>
+          <legend>1. ¿Sobre qué quieres hablar?</legend>
+          <div class="topics">
+            {topics.map((t, i) => (
+              <label class="topic">
+                <input type="radio" name="tema" value={t.key} checked={i === 0} />
+                <span class="t-box">
+                  <span class="t-ico"><Icon name={t.icon} size={20} /></span>
+                  <span class="t-txt"><strong>{t.label}</strong><small>{t.hint}</small></span>
+                </span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>2. Tus datos</legend>
+          <div class="fields">
+            <div class="f">
+              <label for="c-nombre">Nombre y apellido <span aria-hidden="true">*</span></label>
+              <input id="c-nombre" name="nombre" autocomplete="name" data-req data-err="e-nombre" />
+              <p class="err" id="e-nombre" hidden>Escribe tu nombre.</p>
+            </div>
+            <div class="f">
+              <label for="c-empresa">Empresa o institución</label>
+              <input id="c-empresa" name="empresa" autocomplete="organization" />
+            </div>
+            <div class="f">
+              <label for="c-email">Correo electrónico <span aria-hidden="true">*</span></label>
+              <input id="c-email" name="email" type="email" autocomplete="email" placeholder="tu@empresa.com" data-req data-err="e-email" />
+              <p class="err" id="e-email" hidden>Revisa el correo: falta la @ o el dominio.</p>
+            </div>
+            <div class="f">
+              <label for="c-tel">WhatsApp <span aria-hidden="true">*</span></label>
+              <input id="c-tel" name="whatsapp" type="tel" autocomplete="tel" placeholder="+591 7…" data-req data-err="e-tel" />
+              <p class="err" id="e-tel" hidden>Lo necesitamos para responderte.</p>
+            </div>
+            <div class="f">
+              <label for="c-cargo">Cargo</label>
+              <input id="c-cargo" name="cargo" autocomplete="organization-title" placeholder="Ej.: Gerente comercial" />
+            </div>
+            <div class="f">
+              <label for="c-fuente">¿Cómo nos conociste?</label>
+              <select id="c-fuente" name="fuente">
+                <option value="">Elige una opción</option>
+                {sources.map((s) => <option>{s}</option>)}
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="meet-wrap">
+          <legend>3. ¿Quieres agendar una reunión?</legend>
+          <label class="switch">
+            <input type="checkbox" name="reunion" value="sí" data-meet-toggle />
+            <span class="track" aria-hidden="true"><span class="knob"></span></span>
+            <span>Sí, quiero una reunión (30 min, sin costo)</span>
+          </label>
+          <div class="meet" data-meet hidden>
+            <div class="f">
+              <label for="c-fecha">Día preferido <span aria-hidden="true">*</span></label>
+              <input id="c-fecha" name="fecha_reunion" type="date" data-req data-err="e-fecha" />
+              <p class="err" id="e-fecha" hidden>Elige un día.</p>
+            </div>
+            <div class="f">
+              <span class="lab" id="lab-hor">Horario</span>
+              <div class="chips" role="radiogroup" aria-labelledby="lab-hor">
+                <label class="chip"><input type="radio" name="horario" value="Mañana" checked /><span>Mañana</span></label>
+                <label class="chip"><input type="radio" name="horario" value="Tarde" /><span>Tarde</span></label>
+                <label class="chip"><input type="radio" name="horario" value="Noche" /><span>Noche</span></label>
+              </div>
+            </div>
+            <div class="f full">
+              <span class="lab" id="lab-mod">Modalidad</span>
+              <div class="chips" role="radiogroup" aria-labelledby="lab-mod">
+                <label class="chip"><input type="radio" name="modalidad" value="Virtual" checked /><span>Virtual (Meet / Zoom)</span></label>
+                <label class="chip"><input type="radio" name="modalidad" value="Presencial" /><span>Presencial en Santa Cruz</span></label>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="f full">
+          <label for="c-msg">4. Cuéntanos brevemente <span aria-hidden="true" data-msg-star>*</span></label>
+          <textarea id="c-msg" name="mensaje" rows="4" data-req data-err="e-msg" placeholder="Ej.: Queremos un dashboard de ventas conectado a SAP."></textarea>
+          <p class="err" id="e-msg" hidden>Cuéntanos en una o dos líneas qué necesitas.</p>
+        </div>
+
+        <button class="btn btn-primary submit" type="submit"><Icon name="arrow-right" /><span class="lbl">Enviar mensaje</span></button>
+        <p class="note">Al enviar se abre WhatsApp con tu mensaje listo para mandar.</p>
+
+        <div class="ok" data-ok hidden role="status">
+          <Icon name="check-circle" size={44} />
+          <h2 data-ok-title>¡Gracias!</h2>
+          <p data-ok-text>Te respondemos {site.responseTime}.</p>
+          <a class="btn btn-outline" data-wa-again href={waLink()} target="_blank" rel="noopener">¿No se abrió WhatsApp? Ábrelo aquí</a>
+        </div>
+      </form>
+
+      <aside class="side">
+        <div class="side-card reveal">
+          <h2>¿Prefieres hablar directo?</h2>
+          <a class="ch" href={waLink()} target="_blank" rel="noopener"><span class="ch-i wa"><Icon name="message" /></span><span><strong>WhatsApp</strong><small>{site.phoneDisplay}</small></span></a>
+          <a class="ch" href={`mailto:${site.email}`}><span class="ch-i"><Icon name="mail" /></span><span><strong>Correo</strong><small>{site.email}</small></span></a>
+        </div>
+        <div class="side-card soft reveal">
+          <p><Icon name="clock" size={16} />Respondemos {site.responseTime}</p>
+          <p><Icon name="calendar" size={16} />Reuniones de 30 minutos, virtuales o presenciales</p>
+          <p><Icon name="pin" size={16} />{site.city}</p>
+          <p><Icon name="shield" size={16} />Usamos tus datos solo para responderte</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { validate, deliver, setBusy, waUrl } from '../scripts/forms';
+  const form = document.querySelector<HTMLFormElement>('[data-contact]');
+  if (form) {
+    const qs = new URLSearchParams(location.search);
+    const plans = JSON.parse(form.dataset.plans || '{}') as Record<string, string>;
+    const radio = qs.get('tema') ? form.querySelector<HTMLInputElement>(`input[name="tema"][value="${CSS.escape(qs.get('tema')!)}"]`) : null;
+    if (radio) radio.checked = true;
+
+    const toggle = form.querySelector<HTMLInputElement>('[data-meet-toggle]')!;
+    const meet = form.querySelector<HTMLElement>('[data-meet]')!;
+    const date = form.querySelector<HTMLInputElement>('#c-fecha')!;
+    const msg = form.querySelector<HTMLTextAreaElement>('#c-msg')!;
+    const star = form.querySelector<HTMLElement>('[data-msg-star]')!;
+    const btn = form.querySelector<HTMLButtonElement>('.submit');
+    const label = () => (toggle.checked ? 'Solicitar reunión' : 'Enviar mensaje');
+    date.min = new Date().toISOString().slice(0, 10);
+
+    const syncMeet = () => {
+      meet.hidden = !toggle.checked;
+      // Si pide reunión, el mensaje es opcional
+      if (toggle.checked) msg.removeAttribute('data-req'); else msg.setAttribute('data-req', '');
+      star.hidden = toggle.checked;
+      btn!.querySelector('.lbl')!.textContent = label();
+    };
+    toggle.addEventListener('change', syncMeet);
+    if (qs.get('reunion') === '1') toggle.checked = true;
+    const plan = qs.get('plan');
+    if (plan && plans[plan]) msg.value = `Me interesa: ${plans[plan]}.\n`;
+    syncMeet();
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validate(form)) return;
+      const fd = new FormData(form);
+      const tema = form.querySelector<HTMLInputElement>('input[name="tema"]:checked')?.closest('label')?.querySelector('strong')?.textContent ?? '';
+      const wantsMeet = toggle.checked;
+      const fecha = wantsMeet && fd.get('fecha_reunion') ? new Date(`${fd.get('fecha_reunion')}T12:00`).toLocaleDateString('es-BO', { weekday: 'long', day: 'numeric', month: 'long' }) : '';
+      const lines = [
+        `Hola Prometeo, soy ${fd.get('nombre')}${fd.get('cargo') ? `, ${fd.get('cargo')}` : ''}${fd.get('empresa') ? ` de ${fd.get('empresa')}` : ''}.`,
+        `Tema: ${tema}`,
+        wantsMeet ? `Quiero agendar una reunión ${String(fd.get('modalidad')).toLowerCase()} el ${fecha} por la ${String(fd.get('horario')).toLowerCase()}.` : '',
+        String(fd.get('mensaje') ?? '').trim(),
+        `Correo: ${fd.get('email')} · WhatsApp: ${fd.get('whatsapp')}`,
+      ].filter(Boolean);
+      const text = lines.join('\n');
+      setBusy(btn, true, label());
+      const saved = await deliver(form, text, wantsMeet ? `Reunión · ${tema}` : `Contacto · ${tema}`, { tema_nombre: tema });
+      setBusy(btn, false, label());
+      const ok = form.querySelector<HTMLElement>('[data-ok]')!;
+      const first = String(fd.get('nombre')).trim().split(' ')[0];
+      ok.querySelector('[data-ok-title]')!.textContent = wantsMeet ? `¡Listo, ${first}! Recibimos tu pedido de reunión` : `¡Gracias, ${first}!`;
+      ok.querySelector('[data-ok-text]')!.textContent = (saved ? 'Recibimos tus datos. ' : '') + `Te abrimos WhatsApp con el mensaje listo: envíalo y te confirmamos ${wantsMeet ? 'la reunión' : 'la respuesta'} ${'durante el día'}.`;
+      ok.querySelector<HTMLAnchorElement>('[data-wa-again]')!.href = waUrl(text);
+      ok.hidden = false;
+      ok.scrollIntoView({ block: 'center' });
+    });
+  }
+</script>
+
+<style>
+  .c-hero { padding-bottom: 72px; }
+  .c-hero .container { position: relative; z-index: 1; }
+  .c-body { padding-top: 56px; }
+  .c-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 920px) { .c-grid { grid-template-columns: 1fr; } .side { position: static; } }
+  .form { padding: 34px; position: relative; }
+  .form:hover { transform: none; }
+  fieldset { border: 0; padding: 0; margin: 0 0 28px; }
+  legend { font-family: var(--font-display); font-weight: 700; font-size: 19px; margin-bottom: 14px; }
+  .topics { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .topic { position: relative; cursor: pointer; }
+  .topic input, .chip input { position: absolute; opacity: 0; pointer-events: none; }
+  .t-box { display: flex; gap: 12px; align-items: center; padding: 14px; border-radius: 14px; border: 1.5px solid var(--purple-light); min-height: 64px; transition: border-color var(--trans), background var(--trans), box-shadow var(--trans); }
+  .topic:hover .t-box { border-color: var(--purple-soft); }
+  .topic input:checked + .t-box { border-color: var(--purple); background: var(--tint); box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / .15); }
+  .topic input:focus-visible + .t-box, .chip input:focus-visible + span { outline: 3px solid var(--purple); outline-offset: 2px; }
+  .t-ico { width: 40px; height: 40px; flex: none; border-radius: 12px; background: var(--purple-light); color: var(--purple); display: flex; align-items: center; justify-content: center; }
+  .topic input:checked + .t-box .t-ico { background: var(--purple); color: #fff; }
+  .t-txt { display: flex; flex-direction: column; line-height: 1.3; }
+  .t-txt strong { font-size: 15px; }
+  .t-txt small { font-size: 12.5px; color: var(--gray-mid); }
+  .fields, .meet { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .meet { margin-top: 16px; padding: 18px; border-radius: 16px; background: var(--tint); }
+  .f { display: flex; flex-direction: column; gap: 6px; }
+  .f.full { grid-column: 1 / -1; }
+  @media (max-width: 560px) { .fields, .meet { grid-template-columns: 1fr; } .form { padding: 22px; } }
+  .f label, .lab { font-size: 14px; font-weight: 600; }
+  .f label span { color: var(--purple); }
+  input:not([type='radio']):not([type='checkbox']), textarea, select { font: inherit; font-size: 16px; padding: 12px 14px; min-height: 48px; border-radius: 12px; border: 1.5px solid #DDD8EC; background: #fff; color: var(--charcoal); transition: border-color var(--trans), box-shadow var(--trans); }
+  textarea { resize: vertical; }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--purple); box-shadow: 0 0 0 4px rgb(var(--accent-rgb) / .15); }
+  [aria-invalid='true'] { border-color: #C92A2A !important; }
+  .err { font-size: 13px; color: #C92A2A; }
+  .switch { display: inline-flex; align-items: center; gap: 12px; cursor: pointer; font-weight: 600; min-height: 44px; position: relative; }
+  .switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .track { width: 50px; height: 30px; border-radius: 99px; background: #D6D2E4; position: relative; flex: none; transition: background var(--trans); }
+  .knob { position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.2); transition: transform .25s var(--ease-out); }
+  .switch input:checked + .track { background: var(--purple); }
+  .switch input:checked + .track .knob { transform: translateX(20px); }
+  .switch input:focus-visible + .track { outline: 3px solid var(--purple); outline-offset: 2px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { position: relative; cursor: pointer; }
+  .chip span { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 99px; border: 1.5px solid #DDD8EC; background: #fff; font-weight: 600; font-size: 14px; }
+  .chip input:checked + span { background: var(--purple); border-color: var(--purple); color: #fff; }
+  .submit { margin-top: 24px; width: 100%; }
+  .note { font-size: 13px; color: var(--gray-mid); text-align: center; margin-top: 10px; }
+  .ok { position: absolute; inset: 0; background: #fff; border-radius: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; padding: 32px; color: var(--purple); }
+  .ok h2 { color: var(--charcoal); font-size: 26px; max-width: 460px; }
+  .ok p { color: var(--gray-mid); max-width: 440px; }
+  .side { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 100px; }
+  .side-card { background: var(--hero-grad); color: #fff; border-radius: var(--radius-lg); padding: 26px; display: flex; flex-direction: column; gap: 10px; }
+  .side-card h2 { font-size: 20px; margin-bottom: 6px; }
+  .ch { display: flex; gap: 14px; align-items: center; padding: 12px; border-radius: 14px; color: #fff; text-decoration: none; background: rgba(255,255,255,.07); transition: background var(--trans); min-height: 56px; }
+  .ch:hover { background: rgba(255,255,255,.14); color: #fff; }
+  .ch-i { width: 42px; height: 42px; flex: none; border-radius: 12px; background: rgba(255,255,255,.12); display: flex; align-items: center; justify-content: center; }
+  .ch-i.wa { background: #25D366; color: #0B3D22; }
+  .ch strong { display: block; font-size: 15px; }
+  .ch small { font-size: 13px; color: rgba(255,255,255,.7); }
+  .side-card.soft { background: var(--tint); color: var(--charcoal); }
+  .side-card.soft p { display: flex; gap: 10px; align-items: center; font-size: 14px; color: var(--gray-dark); }
+  .side-card.soft :global(svg) { color: var(--purple); flex: none; }
+</style>

@@ -1,5 +1,6 @@
 ---
 import Logo from './Logo.astro';
+import Mark from './Mark.astro';
 import Icon from './Icon.astro';
 import { site, waLink } from '../data/site';
 import { url } from '../lib/url';
@@ -10,33 +11,40 @@ const year = new Date().getFullYear();
     <div class="cols">
       <div class="about">
         <Logo light />
-        <p class="about-text">Consultoría, formación, inteligencia de precios y comunidad de datos.</p>
+        <p class="about-text">Consultoría, formación y comunidad de datos desde Santa Cruz de la Sierra.</p>
         <p class="phrase">"Transformamos datos en decisiones inteligentes."</p>
       </div>
       <div>
-        <h2 class="title">Ecosistema</h2>
+        <h2 class="title">Prometeo</h2>
         <ul class="links">
-          <li><a href={url('consulting/')}>Prometeo Consulting</a></li>
-          <li><a href={url('academy/')}>Prometeo Academy</a></li>
-          <li><a href={url('precio-justo/')}>Precio Justo</a></li>
-          <li><a href={url('talks/')}>Prometeo Talks</a></li>
+          <li><a href={url('consulting/')}><Mark brand="consulting" size={18} class="fi" />Consulting</a></li>
+          <li><a href={url('academy/')}><Mark brand="academy" size={18} class="fi" />Academy</a></li>
+          <li><a href={url('talks/')}><Mark brand="talks" size={18} class="fi" />Talks</a></li>
+          <li><a href={url('nosotros/')}><Mark brand="prometeo" size={18} class="fi" />Nosotros</a></li>
+        </ul>
+        <h2 class="title mt">Proyectos</h2>
+        <ul class="links">
+          <li><a href={url('precio-justo/')}><Mark brand="precio" size={18} class="fi" />Precio Justo by prometeo</a></li>
         </ul>
       </div>
       <div>
         <h2 class="title">Recursos</h2>
         <ul class="links">
-          <li><a href={url('consulting/#propuesta')}>Propuesta comercial</a></li>
+          <li><a href={url('consulting/#propuesta')}>Propuesta comercial (PDF)</a></li>
           <li><a href={url('consulting/#planes')}>Modalidades y precios</a></li>
-          <li><a href={url('academy/#cursos')}>Cursos</a></li>
-          <li><a href={url('#alianzas')}>Alianzas</a></li>
+          <li><a href={url('academy/#cursos')}>Cursos y temarios</a></li>
+          <li><a href={url('academy/#historial')}>Historial y alianzas</a></li>
         </ul>
       </div>
       <div>
         <h2 class="title">Contacto</h2>
         <ul class="links contact">
+          <li><a href={url('contacto/')}><Icon name="message" size={16} />Formulario de contacto</a></li>
           <li><a href={`mailto:${site.email}`}><Icon name="mail" size={16} />{site.email}</a></li>
           <li><a href={waLink()} target="_blank" rel="noopener"><Icon name="message" size={16} />WhatsApp {site.phoneDisplay}</a></li>
-          <li><a href={site.linkedin} target="_blank" rel="noopener"><Icon name="linkedin" size={16} />LinkedIn</a></li>
+          {site.instagram && <li><a href={site.instagram} target="_blank" rel="noopener"><Icon name="instagram" size={16} />Instagram</a></li>}
+          {site.linkedin && <li><a href={site.linkedin} target="_blank" rel="noopener"><Icon name="linkedin" size={16} />LinkedIn</a></li>}
+          <li><a href={site.precioJustoUrl} target="_blank" rel="noopener"><Icon name="tag" size={16} />Plataforma Precio Justo</a></li>
           <li><span><Icon name="pin" size={16} />{site.city}</span></li>
         </ul>
       </div>
@@ -49,15 +57,17 @@ const year = new Date().getFullYear();
 </footer>
 
 <style>
-  .footer { background: var(--charcoal); color: rgba(255,255,255,.7); padding: 68px 0 28px; }
+  .footer { background: #14121F; color: rgba(255,255,255,.7); padding: 72px 0 28px; }
   .cols { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 40px; }
   .about-text { font-size: 14px; margin-top: 16px; max-width: 300px; color: rgba(255,255,255,.62); }
   .phrase { font-size: 13px; font-style: italic; color: rgba(255,255,255,.45); margin-top: 10px; }
-  .title { font-family: var(--font-body); font-size: 12px; font-weight: 700; color: #fff; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px; }
-  .links { list-style: none; display: flex; flex-direction: column; gap: 4px; }
-  .links a, .links span { display: inline-flex; align-items: center; gap: 8px; padding: 6px 0; color: rgba(255,255,255,.7); font-size: 14px; text-decoration: none; transition: color var(--trans); }
-  .links a:hover { color: var(--purple-soft); }
+  .title { font-family: var(--font-body); font-size: 12px; font-weight: 700; color: #fff; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; }
+  .title.mt { margin-top: 26px; }
+  .links { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+  .links a, .links span { display: inline-flex; align-items: center; gap: 9px; padding: 6px 0; color: rgba(255,255,255,.72); font-size: 14px; text-decoration: none; transition: color var(--trans); }
+  .links a:hover { color: #fff; }
   .links :global(svg) { color: var(--purple-soft); flex: none; }
+  .links :global(.fi) { flex: none; }
   .bottom { border-top: 1px solid rgba(255,255,255,.1); margin-top: 48px; padding-top: 22px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; font-size: 13px; color: rgba(255,255,255,.5); }
   @media (max-width: 860px) { .cols { grid-template-columns: 1fr 1fr; } .about { grid-column: 1 / -1; } }
   @media (max-width: 520px) { .cols { grid-template-columns: 1fr; } }

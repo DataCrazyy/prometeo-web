@@ -1,91 +1,112 @@
 ---
-import { Image } from 'astro:assets';
+import Mark from '../components/Mark.astro';
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import SectionHead from '../components/SectionHead.astro';
+import HeroPanel from '../components/HeroPanel.astro';
+import PriceTrackerMock from '../components/PriceTrackerMock.astro';
 import Clients from '../components/Clients.astro';
 import CtaBand from '../components/CtaBand.astro';
-import WaitlistForm from '../components/WaitlistForm.astro';
-import { stats, bookingLink } from '../data/site';
+import { stats, bookingLink, site } from '../data/site';
 import { url } from '../lib/url';
-import precios from '../assets/work/precios-competencia.jpg';
-import ventas from '../assets/work/ventas-1.jpg';
-import distribucion from '../assets/work/distribucion.jpg';
 
 const lines = [
   {
-    key: 'consulting', icon: 'chart', name: 'Prometeo Consulting', status: 'Proyectos activos',
-    text: 'Dashboards ejecutivos, modelado de datos e integración de sistemas con Power BI.',
-    cta: 'Ver servicios', href: 'consulting/',
+    key: 'consulting', icon: 'chart', name: 'Consulting', kicker: 'Asesoría y proyectos',
+    title: 'Business Intelligence que tu gerencia sí usa.',
+    text: 'Dashboards ejecutivos, modelado de datos e integración de sistemas con Power BI, del diagnóstico al soporte.',
+    points: ['Proyecto completo en ~6 semanas', 'Por horas o con soporte mensual', 'Propuesta comercial descargable'],
+    cta: 'Ir a Consulting', href: 'consulting/',
   },
   {
-    key: 'academy', icon: 'graduation', name: 'Prometeo Academy', status: 'Cursos y talleres',
-    text: 'Cursos de Power BI y análisis de datos para empresas, universidades y profesionales.',
-    cta: 'Ver cursos', href: 'academy/',
+    key: 'academy', icon: 'graduation', name: 'Academy', kicker: 'Cursos y capacitación',
+    title: 'Aprende Power BI con quienes lo implementan.',
+    text: 'Programas de 2 meses con clases en vivo y virtuales, casos reales y proyecto final.',
+    points: ['3 niveles: inicial, intermedio y avanzado', 'Para personas, empresas y universidades', 'Desde Bs 800 por persona en grupo'],
+    cta: 'Ir a Academy', href: 'academy/',
   },
   {
-    key: 'precio', icon: 'tag', name: 'Precio Justo', status: 'Producto',
-    text: 'Monitoreo de precios de la competencia con web scraping, listo para decidir.',
-    cta: 'Conocer Precio Justo', href: 'precio-justo/',
-  },
-  {
-    key: 'talks', icon: 'mic', name: 'Prometeo Talks', status: 'Próximamente',
-    text: 'Conferencias, eventos y videos sobre datos, IA aplicada y transformación digital.',
-    cta: 'Unirme a la lista', href: 'talks/',
+    key: 'talks', icon: 'mic', name: 'Talks', kicker: 'Comunidad · Próximamente',
+    title: 'Conversaciones sobre datos e IA, hechas en Bolivia.',
+    text: 'Conferencias, eventos y videos con casos reales de analítica, IA aplicada y transformación digital.',
+    points: ['Conferencias y meetups', 'Videos y entrevistas', 'Lista de espera abierta'],
+    cta: 'Ir a Talks', href: 'talks/',
   },
 ] as const;
-
-const alliances = [
-  { initials: 'UAGRM', name: '[Universidad Autónoma Gabriel René Moreno]', role: 'Alianza académica · [describir convenio]' },
-  { initials: 'UCB', name: 'Universidad Católica Boliviana', role: 'Docencia en programa de posgrado · Power BI' },
-  { initials: '+', name: '[Próxima alianza]', role: 'Empresas, gremios o instituciones' },
-];
 ---
 <Base>
   <!-- HERO -->
   <section class="hero" aria-labelledby="hero-title">
-    <div class="hero-deco" aria-hidden="true"><span class="c1"></span><span class="c2"></span><span class="blob"></span></div>
+    <div class="hero-deco" aria-hidden="true"><span class="c1"></span><span class="c2"></span><span class="blob"></span><span class="blob b2"></span></div>
     <div class="container hero-grid">
       <div class="hero-copy">
-        <p class="badge-line"><Icon name="sparkles" />Consulting · Academy · Precio Justo · Talks</p>
-        <h1 id="hero-title">Transformamos datos en <span class="gradient-text">decisiones inteligentes</span></h1>
-        <p class="lead">Prometeo reúne todo lo que hacemos con datos: implementamos Business Intelligence en empresas, formamos equipos, construimos productos como Precio Justo y compartimos lo que aprendemos.</p>
-        <div class="btn-row">
-          <a class="btn btn-primary" href={bookingLink()} target="_blank" rel="noopener"><Icon name="calendar" />Agendar reunión</a>
-          <a class="btn btn-ghost" href="#ecosistema">Conocer el ecosistema<Icon name="arrow-right" /></a>
+        <p class="badge-line"><Mark size={22} />Consulting · Academy · Talks</p>
+        <h1 id="hero-title" data-split>Transformamos datos en <span class="gradient-text">decisiones inteligentes</span></h1>
+        <p class="lead reveal">Prometeo ayuda a empresas y personas a decidir con datos: implementamos Business Intelligence, formamos equipos y compartimos lo que aprendemos.</p>
+        <div class="btn-row reveal">
+          <a class="btn btn-primary" href={bookingLink()}><Icon name="calendar" />Agendar reunión</a>
+          <a class="btn btn-ghost" href="#lineas">Conocer Prometeo<Icon name="arrow-right" /></a>
         </div>
-        <dl class="hero-stats">
-          {stats.slice(0, 2).map((s) => <div><dt>{s.label}</dt><dd>{s.value}</dd></div>)}
-          <div><dt>Hecho en</dt><dd class="small">Santa Cruz, BO</dd></div>
-        </dl>
       </div>
       <div class="hero-visual">
-        <div class="frame">
-          <div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>Precio Justo · monitoreo de competencia</span></div>
-          <Image src={precios} alt="Dashboard de Precio Justo comparando precios ponderados contra la competencia" widths={[560, 900]} sizes="(max-width: 960px) 92vw, 560px" loading="eager" />
-        </div>
-        <span class="float f1"><Icon name="chart" size={16} />Consulting</span>
-        <span class="float f2"><Icon name="graduation" size={16} />Academy</span>
-        <span class="float f3"><Icon name="mic" size={16} />Talks · pronto</span>
+        <HeroPanel />
+        <span class="float f1 reveal"><Mark brand="consulting" size={20} />Consulting</span>
+        <span class="float f2 reveal"><Mark brand="academy" size={20} />Academy</span>
+        <span class="float f3 reveal"><Mark brand="talks" size={20} />Talks · pronto</span>
       </div>
     </div>
   </section>
 
-  <!-- ECOSISTEMA -->
-  <section id="ecosistema" class="section" aria-labelledby="eco-title">
+  <!-- LÍNEAS (sticky storytelling) -->
+  <section id="lineas" class="story" data-story aria-labelledby="story-title">
     <div class="container">
-      <SectionHead id="eco-title" center eyebrow="El ecosistema" icon="layers"
-        title="Una marca, cuatro formas de trabajar con datos"
-        lead="Elige por dónde empezar: un proyecto para tu empresa, un curso para tu equipo, datos de precios o nuestra comunidad." />
-      <div class="grid grid-4">
-        {lines.map((l) => (
-          <a class={`line card reveal line-${l.key}`} href={url(l.href)}>
-            <span class="line-top"><span class="line-icon"><Icon name={l.icon} /></span><span class="line-status">{l.status}</span></span>
-            <h3>{l.name}</h3>
-            <p>{l.text}</p>
-            <span class="line-cta">{l.cta}<Icon name="arrow-right" size={16} /></span>
-          </a>
-        ))}
+      <header class="story-head">
+        <p class="eyebrow"><Icon name="layers" />Una sola marca</p>
+        <h2 id="story-title" class="section-title" data-split="scroll">Prometeo, en tres frentes.</h2>
+        <p class="section-lead">Cada línea tiene su espacio, pero todas comparten lo mismo: experiencia real con datos.</p>
+      </header>
+      <div class="story-grid">
+        <div class="story-visual" aria-hidden="true">
+          <div class="stage">
+            <!-- Consulting -->
+            <div class="vis v-consulting" data-visual>
+              <div class="vc-top"><span></span><span></span><span></span></div>
+              <div class="vc-kpis"><b>Bs 4,2 M</b><b>34,6 %</b><b>1.840</b></div>
+              <div class="vc-bars">{[40, 62, 50, 78, 70, 90, 84].map((h) => <i style={`height:${h}%`}></i>)}</div>
+              <p class="vis-label">Dashboard ejecutivo</p>
+            </div>
+            <!-- Academy -->
+            <div class="vis v-academy" data-visual>
+              <p class="va-k">Analítica de datos con Power BI</p>
+              <ul>
+                <li class="done"><span>M1</span>Power Query<em>✓</em></li>
+                <li class="done"><span>M2</span>Modelado y DAX<em>✓</em></li>
+                <li class="now"><span>M3</span>Dashboards<em>En curso</em></li>
+                <li><span>M4</span>Publicación y proyecto</li>
+              </ul>
+              <div class="va-chips"><b>En vivo</b><b>Virtual</b><b>1,5 h</b></div>
+              <p class="vis-label">Ruta de 2 meses</p>
+            </div>
+            <!-- Talks -->
+            <div class="vis v-talks" data-visual>
+              <p class="vt-k">Prometeo Talks</p>
+              <p class="vt-n">#01</p>
+              <p class="vt-t">Datos e IA en la empresa boliviana</p>
+              <div class="vt-row"><span>Santa Cruz</span><span>Próximamente</span></div>
+              <div class="vt-wave">{Array.from({ length: 24 }).map((_, i) => <i style={`height:${20 + ((i * 37) % 70)}%`}></i>)}</div>
+            </div>
+          </div>
+        </div>
+        <ol class="steps">
+          {lines.map((l, i) => (
+            <li class={`step s-${l.key}`} data-step>
+              <p class="kicker"><span class="ico"><Mark brand={l.key} size={22} /></span>Prometeo {l.name} · {l.kicker}</p>
+              <h3>{l.title}</h3>
+              <p class="txt">{l.text}</p>
+              <ul class="pts">{l.points.map((p) => <li><Icon name="check" size={16} />{p}</li>)}</ul>
+              <a class="go" href={url(l.href)}>{l.cta}<Icon name="arrow-right" size={18} /></a>
+            </li>
+          ))}
+        </ol>
       </div>
     </div>
   </section>
@@ -93,97 +114,35 @@ const alliances = [
   <!-- CIFRAS -->
   <section class="stats" aria-label="Trayectoria">
     <div class="container">
-      <dl class="stats-grid reveal">
-        {stats.map((s) => <div><dd>{s.value}</dd><dt>{s.label}</dt></div>)}
-      </dl>
-    </div>
-  </section>
-
-  <!-- PRECIO JUSTO -->
-  <section class="section" aria-labelledby="pj-title">
-    <div class="container split">
-      <div class="reveal">
-        <p class="eyebrow pj"><Icon name="tag" />Producto · Precio Justo</p>
-        <h2 class="section-title" id="pj-title">Sabe cuánto cobra tu competencia, todos los días</h2>
-        <div class="divider-line pj-line"></div>
-        <p class="section-lead">Recolectamos precios de tiendas en línea con web scraping, los emparejamos con tus productos y te mostramos dónde estás caro o barato.</p>
-        <ul class="check-list pj-list">
-          <li><Icon name="check" />Precio ponderado frente a cada competidor</li>
-          <li><Icon name="check" />Emparejamiento automático de productos</li>
-          <li><Icon name="check" />Desvío por artículo y tendencia histórica</li>
-        </ul>
-        <div class="btn-row"><a class="btn btn-primary" href={url('precio-justo/')}>Conocer Precio Justo<Icon name="arrow-right" /></a></div>
-      </div>
-      <div class="shot reveal">
-        <Image src={precios} alt="Comparación de precios por artículo y tendencia frente a la competencia" widths={[600, 1000]} sizes="(max-width: 960px) 92vw, 560px" />
-      </div>
-    </div>
-  </section>
-
-  <!-- CONSULTING + ACADEMY -->
-  <section class="section section-alt" aria-labelledby="ca-title">
-    <div class="container">
-      <SectionHead id="ca-title" center eyebrow="Lo que venimos haciendo" icon="target"
-        title="Proyectos en empresas y aulas llenas"
-        lead="La experiencia de los proyectos alimenta los cursos, y los cursos nos acercan a nuevos proyectos." />
-      <div class="grid grid-2">
-        <article class="duo card reveal">
-          <div class="duo-media">
-            <Image src={ventas} alt="Dashboard de ventas con toneladas, proyección y utilidad bruta" widths={[480, 800]} sizes="(max-width: 960px) 92vw, 540px" />
+      <dl class="stats-grid">
+        {stats.map((s) => (
+          <div class="reveal">
+            <dd>{s.count !== null ? <span data-count={s.count} data-prefix={s.prefix}>{s.prefix}{s.count}</span> : s.text}</dd>
+            <dt>{s.label}</dt>
           </div>
-          <div class="duo-body">
-            <p class="eyebrow"><Icon name="chart" />Prometeo Consulting</p>
-            <h3>Business Intelligence a la medida</h3>
-            <p>Dashboards comerciales, financieros y de distribución en producción, conectados a SAP, SQL y Excel.</p>
-            <a class="more" href={url('consulting/')}>Ver servicios, precios y propuesta<Icon name="arrow-right" size={16} /></a>
-          </div>
-        </article>
-        <article class="duo card reveal">
-          <div class="duo-media academy-media">
-            <Image src={distribucion} alt="Dashboard ejecutivo de distribución usado como caso en clase" widths={[480, 800]} sizes="(max-width: 960px) 92vw, 540px" />
-            <span class="media-tag"><Icon name="graduation" size={14} />Casos reales en clase</span>
-          </div>
-          <div class="duo-body">
-            <p class="eyebrow academy"><Icon name="graduation" />Prometeo Academy</p>
-            <h3>Cursos de Power BI que se aplican el lunes</h3>
-            <p>Programas para empresas, universidades y profesionales, con casos reales y proyecto final.</p>
-            <a class="more" href={url('academy/')}>Ver cursos y formatos<Icon name="arrow-right" size={16} /></a>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ALIANZAS -->
-  <section id="alianzas" class="section" aria-labelledby="al-title">
-    <div class="container">
-      <SectionHead id="al-title" center eyebrow="Alianzas" icon="handshake"
-        title="Instituciones con las que construimos"
-        lead="Trabajamos con universidades e instituciones para llevar la analítica de datos a más personas." />
-      <ul class="grid grid-3 alliances">
-        {alliances.map((a) => (
-          <li class="card reveal ally">
-            <span class="ally-logo" aria-hidden="true">{a.initials}</span>
-            <div><h3>{a.name}</h3><p>{a.role}</p></div>
-          </li>
         ))}
-      </ul>
+      </dl>
     </div>
   </section>
 
   <Clients />
 
-  <!-- TALKS -->
-  <section class="section section-dark" aria-labelledby="tk-title">
-    <div class="container split">
-      <div class="reveal">
-        <p class="eyebrow"><Icon name="mic" />Prometeo Talks · Próximamente</p>
-        <h2 class="section-title" id="tk-title">Conversaciones sobre datos e IA, hechas en Bolivia</h2>
-        <div class="divider-line"></div>
-        <p class="section-lead">Estamos preparando conferencias, eventos y videos con casos reales de analítica, IA aplicada y transformación digital.</p>
-        <div class="tags dark-tags"><span class="tag">Datos y BI</span><span class="tag">IA aplicada</span><span class="tag">Transformación digital</span><span class="tag">Carrera en datos</span></div>
+  <!-- PROYECTO: PRECIO JUSTO BY PROMETEO -->
+  <section class="project" aria-labelledby="pj-title">
+    <div class="container">
+      <p class="proj-k reveal">Proyectos Prometeo</p>
+      <div class="pj-card">
+        <div class="pj-copy reveal">
+          <p class="pj-badge"><Mark brand="precio" size={20} />Precio Justo <span>by prometeo</span></p>
+          <h2 id="pj-title">Además de asesorar, construimos productos.</h2>
+          <p>Precio Justo compara automáticamente los precios de Fidalga, Hipermaxi, Amarket, Farmacorp y Farmacias Chávez, producto por producto.</p>
+          <div class="btn-row">
+            <a class="btn pj-btn" href={site.precioJustoUrl} target="_blank" rel="noopener"><Icon name="search" />Buscar precios</a>
+            <a class="btn btn-ghost" href={url('precio-justo/')}>Conocer el proyecto<Icon name="arrow-right" /></a>
+          </div>
+        </div>
+        <div class="pj-mock" data-parallax="6"><PriceTrackerMock compact /></div>
       </div>
-      <div class="reveal"><WaitlistForm /></div>
     </div>
   </section>
 
@@ -192,85 +151,94 @@ const alliances = [
 
 <style>
   /* HERO */
-  .hero { background: var(--hero-grad); color: #fff; position: relative; overflow: hidden; padding: 140px 0 96px; min-height: min(100vh, 860px); display: flex; align-items: center; }
+  .hero { background: var(--hero-grad); color: #fff; position: relative; overflow: hidden; padding: 150px 0 120px; min-height: min(100vh, 900px); display: flex; align-items: center; }
   .hero-deco span { position: absolute; border-radius: 50%; pointer-events: none; }
-  .c1 { width: 700px; height: 700px; top: -220px; right: -160px; border: 1px solid rgba(124,77,255,.18); }
-  .c2 { width: 460px; height: 460px; top: -90px; right: 60px; border: 1px solid rgba(124,77,255,.1); }
-  .blob { width: 480px; height: 480px; bottom: -180px; left: -120px; background: var(--purple); filter: blur(70px); opacity: .2; }
-  .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; position: relative; }
-  .hero h1 { font-size: clamp(36px, 5.2vw, 60px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.08; }
-  .hero .lead { font-size: 18px; color: rgba(255,255,255,.75); max-width: 540px; margin: 22px 0 36px; line-height: 1.7; }
-  .hero-stats { display: flex; flex-wrap: wrap; gap: 36px; margin: 48px 0 0; }
-  .hero-stats div { display: flex; flex-direction: column-reverse; }
-  .hero-stats dd { margin: 0; font-family: var(--font-display); font-size: 32px; font-weight: 800; letter-spacing: -1px; line-height: 1; }
-  .hero-stats dd.small { font-size: 20px; line-height: 1.6; }
-  .hero-stats dt { font-size: 13px; color: rgba(255,255,255,.6); margin-top: 6px; }
-  .hero-visual { position: relative; }
-  .frame { background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,.45); transform: perspective(1400px) rotateY(-6deg) rotateX(2deg); }
-  .frame-bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: #F0EEF8; font-size: 12px; color: var(--gray-mid); }
-  .frame-bar i { width: 10px; height: 10px; border-radius: 50%; background: #D5CDF0; }
-  .frame-bar span { margin-left: 8px; }
-  .float { position: absolute; display: inline-flex; align-items: center; gap: 8px; background: #fff; color: var(--charcoal); font-size: 13px; font-weight: 600; padding: 10px 16px; border-radius: 50px; box-shadow: 0 12px 30px rgba(0,0,0,.25); animation: floatY 6s ease-in-out infinite; }
-  .float :global(svg) { color: var(--purple); }
-  .f1 { top: -18px; left: -12px; }
-  .f2 { bottom: 28px; left: -34px; animation-delay: 1s; }
-  .f2 :global(svg) { color: var(--c-academy); }
-  .f3 { bottom: -18px; right: 20px; animation-delay: .5s; }
-  .f3 :global(svg) { color: var(--c-talks); }
-  @keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-  @media (max-width: 960px) {
-    .hero-grid { grid-template-columns: 1fr; }
-    .frame { transform: none; }
-    .f2 { left: 8px; }
+  .c1 { width: 760px; height: 760px; top: -240px; right: -180px; border: 1px solid rgb(var(--accent-rgb) / .2); }
+  .c2 { width: 500px; height: 500px; top: -110px; right: 40px; border: 1px solid rgb(var(--accent-rgb) / .1); }
+  .blob { width: 720px; height: 720px; bottom: -320px; left: -260px; background: radial-gradient(circle, rgb(var(--accent-rgb) / .38), transparent 65%); }
+  .blob.b2 { width: 560px; height: 560px; top: -5%; left: 35%; bottom: auto; background: radial-gradient(circle, rgb(var(--accent-rgb) / .2), transparent 65%); }
+  .hero-grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: 56px; align-items: center; position: relative; }
+  .hero h1 { font-size: clamp(40px, 5.6vw, 68px); font-weight: 800; letter-spacing: -2px; line-height: 1.04; }
+  .hero .lead { font-size: 19px; color: rgba(255,255,255,.75); max-width: 520px; margin: 24px 0 36px; line-height: 1.7; }
+  .hero-visual { position: relative; perspective: 1400px; }
+  .float { position: absolute; display: inline-flex; align-items: center; gap: 8px; background: #fff; color: var(--charcoal); font-size: 14px; font-weight: 600; padding: 11px 18px; border-radius: 50px; box-shadow: 0 14px 34px rgba(0,0,0,.28); }
+  .f1 { top: -22px; left: 8%; } .f1 :global(svg) { color: var(--c-consulting); }
+  .f2 { bottom: 26%; left: -24px; } .f2 :global(svg) { color: var(--c-academy); }
+  .f3 { bottom: -22px; right: 6%; } .f3 :global(svg) { color: var(--c-talks); }
+  @media (max-width: 960px) { .hero-grid { grid-template-columns: 1fr; } .f2 { left: 8px; } }
+
+  /* STORY */
+  .story { padding: 120px 0 40px; background: #fff; }
+  .story-head { text-align: center; max-width: 720px; margin: 0 auto 64px; }
+  .story-head .section-lead { margin-left: auto; margin-right: auto; }
+  .story-head .section-title { font-size: clamp(36px, 5vw, 60px); letter-spacing: -2px; }
+  .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
+  .story-visual { position: relative; }
+  .stage { position: sticky; top: 18vh; height: 64vh; min-height: 440px; max-height: 560px; border-radius: 32px; background: #F6F5FB; overflow: hidden; transition: background .6s var(--ease-out); }
+  [data-active='0'] .stage { background: linear-gradient(160deg, #EDE7F6, #F8F6FE); }
+  [data-active='1'] .stage { background: linear-gradient(160deg, #E3E9FF, #F5F7FF); }
+  [data-active='2'] .stage { background: linear-gradient(160deg, #FFE8D9, #FFF7F1); }
+  .vis { position: absolute; inset: 12% 12%; border-radius: 22px; background: #fff; box-shadow: 0 30px 70px rgba(30,27,46,.14); padding: 22px; opacity: 0; transform: translateY(30px) scale(.96); transition: opacity .6s var(--ease-out), transform .8s var(--ease-out); display: flex; flex-direction: column; gap: 14px; }
+  .vis.is-active { opacity: 1; transform: none; }
+  .vis-label { margin-top: auto; font-size: 12px; font-weight: 600; color: var(--gray-mid); }
+  .vc-top { display: flex; gap: 6px; } .vc-top span { width: 10px; height: 10px; border-radius: 50%; background: #E2DAF8; }
+  .vc-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .vc-kpis b { background: #F4F1FC; border-radius: 12px; padding: 14px 10px; font-family: var(--font-display); font-size: 18px; color: #3D1E9E; }
+  .vc-bars { flex: 1; display: flex; align-items: flex-end; gap: 8px; background: #F4F1FC; border-radius: 14px; padding: 14px; }
+  .vc-bars i { flex: 1; border-radius: 6px 6px 0 0; background: linear-gradient(180deg, #9B6EFF, #7C4DFF); }
+  .va-k { font-family: var(--font-display); font-weight: 700; font-size: 17px; color: #1E3398; }
+  .v-academy ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .v-academy li { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #F1F4FF; font-size: 14px; color: #263159; }
+  .v-academy li span { font-size: 11px; font-weight: 700; color: #3B5BDB; background: #fff; border-radius: 8px; padding: 3px 7px; }
+  .v-academy li em { margin-left: auto; font-style: normal; font-size: 12px; font-weight: 600; color: #3B5BDB; }
+  .v-academy li.now { background: #3B5BDB; color: #fff; } .v-academy li.now em { color: #fff; }
+  .va-chips { display: flex; gap: 6px; } .va-chips b { font-size: 12px; padding: 5px 10px; border-radius: 99px; background: #E7ECFF; color: #2F4AC0; }
+  .v-talks { background: linear-gradient(160deg, #2A1206, #5A2309); color: #fff; }
+  .vt-k { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #FFA94D; }
+  .vt-n { font-family: var(--font-display); font-weight: 800; font-size: 72px; line-height: 1; letter-spacing: -3px; }
+  .vt-t { font-family: var(--font-display); font-size: 20px; font-weight: 700; max-width: 260px; }
+  .vt-row { display: flex; gap: 8px; } .vt-row span { font-size: 12px; padding: 5px 10px; border-radius: 99px; border: 1px solid rgba(255,255,255,.3); }
+  .vt-wave { margin-top: auto; display: flex; align-items: center; gap: 4px; height: 60px; }
+  .vt-wave i { flex: 1; border-radius: 4px; background: linear-gradient(180deg, #FFA94D, #F76707); animation: wave 1.4s ease-in-out infinite alternate; }
+  .vt-wave i:nth-child(3n) { animation-delay: .2s; } .vt-wave i:nth-child(4n) { animation-delay: .45s; }
+  @keyframes wave { to { transform: scaleY(.45); } }
+
+  .steps { list-style: none; padding: 0; margin: 0; }
+  .step { min-height: 72vh; display: flex; flex-direction: column; justify-content: center; gap: 16px; opacity: .3; transition: opacity .5s var(--ease-out); --c: var(--c-consulting); --cbg: var(--c-consulting-bg); }
+  .step.is-active { opacity: 1; }
+  .no-js .step, .step:only-child { opacity: 1; }
+  .s-academy { --c: var(--c-academy); --cbg: var(--c-academy-bg); }
+  .s-talks { --c: var(--c-talks); --cbg: var(--c-talks-bg); }
+  .kicker { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .5px; color: var(--c); }
+  .ico { width: 36px; height: 36px; border-radius: 10px; background: var(--cbg); display: inline-flex; align-items: center; justify-content: center; }
+  .step h3 { font-size: clamp(30px, 3.6vw, 46px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.08; }
+  .txt { font-size: 18px; color: var(--gray-mid); max-width: 480px; }
+  .pts { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .pts li { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--gray-dark); }
+  .pts :global(svg) { color: var(--c); }
+  .go { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; padding: 13px 24px; min-height: 48px; border-radius: 99px; background: var(--c); color: #fff; font-weight: 600; text-decoration: none; transition: transform var(--trans), box-shadow var(--trans); }
+  .go:hover { color: #fff; transform: translateY(-2px); box-shadow: 0 12px 28px color-mix(in srgb, var(--c) 40%, transparent); }
+  @media (max-width: 900px) {
+    .story-grid { grid-template-columns: 1fr; gap: 0; }
+    .story-visual { display: none; }
+    .step { min-height: auto; padding: 36px 0; opacity: 1; border-top: 1px solid #EEEAF6; }
   }
 
-  /* ECOSISTEMA */
-  .line { display: flex; flex-direction: column; text-decoration: none; color: inherit; --accent: var(--c-consulting); --accent-bg: var(--c-consulting-bg); }
-  .line-academy { --accent: var(--c-academy); --accent-bg: var(--c-academy-bg); }
-  .line-precio { --accent: var(--c-precio); --accent-bg: var(--c-precio-bg); }
-  .line-talks { --accent: var(--c-talks); --accent-bg: var(--c-talks-bg); }
-  .line::before { background: var(--accent); }
-  .line-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
-  .line-icon { width: 56px; height: 56px; border-radius: 16px; background: var(--accent-bg); color: var(--accent); display: flex; align-items: center; justify-content: center; transition: background var(--trans), color var(--trans); }
-  .line:hover .line-icon { background: var(--accent); color: #fff; }
-  .line-status { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 50px; background: var(--accent-bg); color: var(--accent); }
-  .line h3 { font-size: 20px; }
-  .line p { flex: 1; }
-  .line-cta { display: inline-flex; align-items: center; gap: 6px; margin-top: 20px; font-weight: 600; font-size: 15px; color: var(--accent); }
-  .line:hover .line-cta :global(svg) { transform: translateX(4px); }
-  .line-cta :global(svg) { transition: transform var(--trans); }
-
-  /* CIFRAS */
-  .stats { background: linear-gradient(90deg, var(--purple-dark), var(--purple)); color: #fff; padding: 44px 0; }
+  /* STATS */
+  .stats { background: linear-gradient(90deg, var(--purple-dark), var(--purple)); color: #fff; padding: 52px 0; }
   .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 24px; margin: 0; text-align: center; }
-  .stats-grid dd { margin: 0; font-family: var(--font-display); font-size: 40px; font-weight: 800; letter-spacing: -1px; }
-  .stats-grid dt { font-size: 14px; color: rgba(255,255,255,.82); }
+  .stats-grid dd { margin: 0; font-family: var(--font-display); font-size: 48px; font-weight: 800; letter-spacing: -1.5px; font-variant-numeric: tabular-nums; }
+  .stats-grid dt { font-size: 14px; color: rgba(255,255,255,.85); }
 
-  /* SPLIT */
-  .split { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 56px; align-items: center; }
-  .eyebrow.pj { color: var(--c-precio); }
-  .pj-line { background: linear-gradient(90deg, var(--c-precio), #5FD3AE); }
-  .pj-list { margin: 26px 0 32px; }
-  .pj-list :global(svg) { color: var(--c-precio); }
-  .shot { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid rgba(124,77,255,.12); }
-
-  /* DUO */
-  .duo { padding: 0; display: flex; flex-direction: column; }
-  .duo-media { aspect-ratio: 16 / 9; overflow: hidden; background: var(--gray-light); position: relative; }
-  .duo-media :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: top left; transition: transform .5s ease; }
-  .duo:hover .duo-media :global(img) { transform: scale(1.04); }
-  .media-tag { position: absolute; left: 14px; bottom: 14px; display: inline-flex; gap: 6px; align-items: center; background: var(--c-academy); color: #fff; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 50px; }
-  .duo-body { padding: 28px 28px 30px; }
-  .duo-body h3 { font-size: 22px; }
-  .eyebrow.academy { color: var(--c-academy); }
-  .more { display: inline-flex; align-items: center; gap: 6px; margin-top: 18px; font-weight: 600; text-decoration: none; padding: 6px 0; }
-
-  /* ALIANZAS */
-  .alliances { list-style: none; }
-  .ally { display: flex; gap: 18px; align-items: center; }
-  .ally-logo { width: 72px; height: 72px; border-radius: 18px; flex: none; background: var(--purple-light); color: var(--purple-dark); font-family: var(--font-display); font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; }
-  .ally h3 { font-size: 17px; }
-
-  .dark-tags { margin-top: 26px; }
-  .dark-tags .tag { background: rgba(255,255,255,.1); color: #fff; border: 1px solid rgba(255,255,255,.2); padding: 6px 14px; font-size: 13px; }
+  /* PROYECTO */
+  .project { padding: 40px 0 110px; background: #fff; }
+  .proj-k { text-align: center; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gray-mid); margin-bottom: 20px; }
+  .pj-card { display: grid; grid-template-columns: 1fr 1.25fr; gap: 48px; align-items: center; background: linear-gradient(150deg, #03201A, #08463A 60%, #0B5C47); border-radius: 36px; padding: clamp(32px, 5vw, 64px); color: #fff; overflow: hidden; }
+  .pj-badge { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 99px; background: rgba(99,230,190,.15); border: 1px solid rgba(99,230,190,.4); color: #B2F2DA; font-size: 13px; font-weight: 700; margin-bottom: 20px; }
+  .pj-badge span { font-weight: 500; opacity: .8; }
+  .pj-copy h2 { font-size: clamp(28px, 3.4vw, 42px); font-weight: 800; letter-spacing: -1.2px; }
+  .pj-copy p:not(.pj-badge) { color: rgba(255,255,255,.78); font-size: 17px; margin: 16px 0 28px; }
+  .pj-btn { background: #12B886; color: #03201A; }
+  .pj-btn:hover { background: #63E6BE; color: #03201A; transform: translateY(-3px); }
+  @media (max-width: 960px) { .pj-card { grid-template-columns: 1fr; } }
 </style>

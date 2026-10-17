@@ -1,4 +1,5 @@
 ---
+import Mark from '../components/Mark.astro';
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import SectionHead from '../components/SectionHead.astro';
@@ -10,12 +11,12 @@ const formats = [
   { icon: 'video', t: 'Videos y contenido', d: 'Tutoriales, entrevistas y resúmenes de cada evento.' },
 ] as const;
 ---
-<Base title="Talks · Próximamente" description="Prometeo Talks: conferencias, eventos y videos sobre datos, IA aplicada y transformación digital en Bolivia. Únete a la lista de espera.">
+<Base theme="talks" title="Talks · Próximamente" description="Prometeo Talks: conferencias, eventos y videos sobre datos, IA aplicada y transformación digital en Bolivia. Únete a la lista de espera.">
   <section class="page-hero talks-hero" aria-labelledby="h">
     <div class="container talks-grid">
       <div>
-        <p class="badge-line talks-badge"><Icon name="bell" />Próximamente</p>
-        <h1 id="h">Prometeo <span class="talks-text">Talks</span></h1>
+        <p class="badge-line"><Mark brand="talks" size={22} />Prometeo Talks · Próximamente</p>
+        <h1 id="h" data-split>Prometeo <span class="gradient-text">Talks</span></h1>
         <p class="lead">Conversaciones sobre datos, IA aplicada y transformación digital, con personas que lo están haciendo en Bolivia.</p>
       </div>
       <WaitlistForm />
@@ -29,7 +30,7 @@ const formats = [
       <div class="grid grid-3">
         {formats.map((f) => (
           <article class="card reveal">
-            <div class="icon-chip talks-chip"><Icon name={f.icon} /></div>
+            <div class="icon-chip"><Icon name={f.icon} /></div>
             <h3>{f.t}</h3>
             <p>{f.d}</p>
           </article>
@@ -40,10 +41,7 @@ const formats = [
 </Base>
 
 <style>
-  .talks-hero { background: linear-gradient(135deg, #1A0E3B 0%, #3A1A3F 55%, #4A1E12 100%); padding-bottom: 104px; }
+  .talks-hero { padding-bottom: 104px; }
   .talks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 56px; align-items: center; position: relative; z-index: 1; }
-  .talks-badge { background: rgba(255,138,61,.18); border-color: rgba(255,138,61,.5); color: #FFC9A3; }
-  .talks-text { background: linear-gradient(90deg, #FFB37A, #FF7A3D); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-  .talks-chip { background: var(--c-talks-bg); color: var(--c-talks); }
-  .card:hover .talks-chip { background: var(--c-talks); color: #fff; }
+  .talks-grid h1 { font-size: clamp(48px, 7vw, 88px); letter-spacing: -3px; }
 </style>

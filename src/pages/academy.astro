@@ -1,62 +1,42 @@
 ---
+import Mark from '../components/Mark.astro';
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import SectionHead from '../components/SectionHead.astro';
 import CtaBand from '../components/CtaBand.astro';
-import { waLink } from '../data/site';
-
-// Catálogo de cursos — edita duración, modalidad y precio cuando los tengas.
-const courses = [
-  {
-    level: 'Inicial', t: 'Power BI desde cero', icon: 'chart',
-    d: 'Conecta tus datos, crea tus primeros reportes y publícalos para tu equipo.',
-    meta: ['[16] horas', 'Presencial o virtual', 'Certificado'],
-    topics: ['Power Query', 'Modelo de datos', 'Visualizaciones', 'Publicación'],
-  },
-  {
-    level: 'Intermedio', t: 'DAX y modelado para negocio', icon: 'database',
-    d: 'Medidas, inteligencia de tiempo y modelos que responden preguntas de gerencia.',
-    meta: ['[20] horas', 'Presencial o virtual', 'Proyecto final'],
-    topics: ['DAX', 'Inteligencia de tiempo', 'Modelo estrella', 'Rendimiento'],
-  },
-  {
-    level: 'Avanzado', t: 'Dashboards ejecutivos con IA', icon: 'bot',
-    d: 'Diseño de tableros para la toma de decisiones y uso de IA en el análisis.',
-    meta: ['[12] horas', 'Taller práctico', 'Casos reales'],
-    topics: ['Storytelling', 'UX de dashboards', 'Copilot e IA', 'Automatización'],
-  },
-] as const;
+import { waLink, stats } from '../data/site';
+import { courses, format, history, bs, faqs } from '../data/courses';
+import { url } from '../lib/url';
+const pdf = (level: string) => url(`academy/Temario_${level}_Prometeo_Academy.pdf`);
 
 const formats = [
-  {
-    icon: 'graduation', t: 'Prometeo Student', who: 'Universidades y estudiantes',
-    d: 'Programas para pregrado, posgrado y diplomados, alineados al plan académico.',
-  },
-  {
-    icon: 'building', t: 'Prometeo Enterprise', who: 'Empresas',
-    d: 'Capacitación in-company con los datos y casos de tu propia empresa.',
-  },
-  {
-    icon: 'users', t: 'Cursos abiertos', who: 'Profesionales',
-    d: 'Grupos reducidos con fechas publicadas. [Próximas fechas por confirmar]',
-  },
+  { icon: 'graduation', t: 'Prometeo Student', who: 'Universidades', d: 'Programas para pregrado, posgrado y diplomados, alineados al plan académico de tu institución.' },
+  { icon: 'building', t: 'Prometeo Enterprise', who: 'Empresas', d: 'Capacitación in-company con los datos y casos de tu propia empresa. Precio de grupo desde 3 personas.' },
+  { icon: 'users', t: 'Cohortes abiertas', who: 'Personas', d: 'Inscríbete solo o con tu equipo en la próxima cohorte, con clases en vivo y virtuales.' },
 ] as const;
-
-const taught = ['Universidad Católica Boliviana · Posgrado', 'Industrias Venado', 'Nexocorp', '[Universidad Gabriel René Moreno]'];
+const talk = waLink('Hola Prometeo Academy, quiero conversar sobre los cursos.');
+const faqSchema = {
+  '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: faqs.filter((f) => !f.a.includes('[')).map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
 ---
-<Base title="Academy · Cursos de Power BI y análisis de datos" description="Prometeo Academy ofrece cursos de Power BI, DAX y dashboards ejecutivos para universidades, empresas y profesionales en Bolivia.">
-  <section class="page-hero academy-hero" aria-labelledby="h">
-    <div class="container">
-      <p class="badge-line"><Icon name="graduation" />Prometeo Academy</p>
-      <h1 id="h">Aprende Power BI con quienes lo <span class="gradient-text">implementan cada día</span></h1>
-      <p class="lead">Cursos y talleres prácticos para universidades, empresas y profesionales, con casos reales de proyectos en Bolivia.</p>
-      <div class="btn-row">
-        <a class="btn btn-primary" href="#cursos">Ver cursos<Icon name="arrow-right" /></a>
-        <a class="btn btn-ghost" href={waLink('Hola, quiero el temario de los cursos de Prometeo Academy.')} target="_blank" rel="noopener"><Icon name="message" />Pedir temario</a>
+<Base theme="academy" schema={faqSchema} title="Academy · Cursos de Power BI y análisis de datos" description="Prometeo Academy: cursos de Power BI de 2 meses, con clases en vivo y virtuales, para personas, empresas y universidades en Bolivia.">
+  <section class="page-hero" aria-labelledby="h">
+    <div class="container a-hero">
+      <div>
+        <p class="badge-line"><Mark brand="academy" size={22} />Prometeo Academy</p>
+        <h1 id="h" data-split>Aprende Power BI con quienes lo <span class="gradient-text">implementan cada día</span></h1>
+        <p class="lead reveal">Cursos de 2 meses con casos reales, una clase en vivo y una virtual por semana, y un proyecto final que te llevas a tu trabajo.</p>
+        <div class="btn-row reveal">
+          <a class="btn btn-primary" href="#cursos">Ver cursos<Icon name="arrow-right" /></a>
+          <a class="btn btn-ghost" href={talk} target="_blank" rel="noopener"><Icon name="message" />Conversa con nosotros</a>
+        </div>
       </div>
-      <ul class="taught" aria-label="Dónde hemos enseñado">
-        <li class="taught-label">Hemos enseñado en:</li>
-        {taught.map((t) => <li>{t}</li>)}
+      <ul class="facts reveal" aria-label="Formato de los cursos">
+        <li><strong>{format.duration}</strong><span>de duración</span></li>
+        <li><strong>{format.perWeek} clases</strong><span>por semana</span></li>
+        <li><strong>1,5 h</strong><span>por sesión</span></li>
+        <li><strong>En vivo + virtual</strong><span>1 de cada una por semana</span></li>
       </ul>
     </div>
   </section>
@@ -64,30 +44,132 @@ const taught = ['Universidad Católica Boliviana · Posgrado', 'Industrias Venad
   <section id="cursos" class="section" aria-labelledby="cur">
     <div class="container">
       <SectionHead id="cur" center eyebrow="Cursos" icon="book" title="Elige tu nivel"
-        lead="Tres cursos que se pueden tomar por separado o como ruta completa." />
+        lead={`Cada curso tiene ${format.sessions} sesiones. Toca "Quiero este curso" para ver el temario completo y los precios.`} />
       <div class="grid grid-3">
-        {courses.map((c) => (
-          <article class="course card reveal">
+        {courses.map((c, i) => (
+          <article class:list={['course card reveal', { featured: i === 0 }]} data-tilt>
+            {i === 0 && <span class="ribbon">Empieza aquí</span>}
             <div class="course-top"><span class="icon-chip"><Icon name={c.icon} /></span><span class="level">{c.level}</span></div>
-            <h3>{c.t}</h3>
-            <p>{c.d}</p>
-            <ul class="meta">{c.meta.map((m) => <li><Icon name="check" size={15} />{m}</li>)}</ul>
-            <div class="tags">{c.topics.map((t) => <span class="tag">{t}</span>)}</div>
-            <a class="btn btn-outline" href={waLink(`Hola, quiero información del curso "${c.t}".`)} target="_blank" rel="noopener">Quiero este curso</a>
+            <h3>{c.title}</h3>
+            <p>{c.summary}</p>
+            <div class="price">
+              <div><span class="amt">{bs(c.priceSolo)}</span><span class="per">por persona</span></div>
+              <div class="grp"><span class="amt sm">{bs(c.priceGroup)}</span><span class="per">c/u en grupo de {format.groupMin}+</span></div>
+            </div>
+            <ul class="meta">
+              <li><Icon name="calendar" size={15} />{format.duration} · {format.sessions} sesiones</li>
+              <li><Icon name="clock" size={15} />{format.perWeek} por semana · 1,5 h</li>
+              <li><Icon name="video" size={15} />1 en vivo + 1 virtual</li>
+              <li><Icon name="download" size={15} />Clases grabadas en Google Drive</li>
+            </ul>
+            <button class="btn btn-primary" type="button" data-open={`dlg-${c.id}`}>Quiero este curso</button>
+            <a class="dl" href={pdf(c.level)} download><Icon name="download" size={16} />Descargar temario (PDF)</a>
           </article>
         ))}
       </div>
+      <p class="fine reveal">Precios en bolivianos. El precio de grupo aplica por persona a partir de {format.groupMin} inscritos de la misma empresa o institución.</p>
     </div>
   </section>
 
+  {courses.map((c) => (
+    <dialog id={`dlg-${c.id}`} class="dlg" aria-labelledby={`t-${c.id}`} data-course={c.title} data-level={c.level} data-solo={c.priceSolo} data-group={c.priceGroup}>
+      <div class="dlg-in" data-view="temario">
+        <header class="dlg-head">
+          <div>
+            <p class="dlg-k"><span class="only-t">{c.level} · Temario</span><span class="only-f">{c.level} · Inscripción</span></p>
+            <h2 id={`t-${c.id}`}>{c.title}</h2>
+          </div>
+          <button type="button" class="x" data-close aria-label="Cerrar"><Icon name="close" /></button>
+        </header>
+
+        <div class="dlg-body only-t">
+          <div class="dlg-summary">
+            <div class="box"><span>Inversión individual</span><strong>{bs(c.priceSolo)}</strong></div>
+            <div class="box"><span>Grupo de {format.groupMin}+ (c/u)</span><strong>{bs(c.priceGroup)}</strong></div>
+            <div class="box"><span>Duración</span><strong>{format.duration}</strong><em>{format.sessions} sesiones · 1,5 h</em></div>
+            <div class="box"><span>Modalidad</span><strong>En vivo + virtual</strong><em>Clases grabadas en Google Drive</em></div>
+          </div>
+          <p class="who"><strong>¿Para quién?</strong> {c.forWho}</p>
+          <p class="who"><strong>Te llevas:</strong> {c.outcome}</p>
+          <div class="mods">
+            {c.modules.map((m, i) => (
+              <details open={i === 0}>
+                <summary>{m.title}<Icon name="arrow-right" size={16} class="chev" /></summary>
+                <ol>
+                  {m.sessions.map((s) => (
+                    <li>
+                      <span class="sn">S{s.n}</span>
+                      <div><strong>{s.title}</strong><ul>{s.goals.map((g) => <li>{g}</li>)}</ul></div>
+                    </li>
+                  ))}
+                </ol>
+              </details>
+            ))}
+          </div>
+          <a class="dl dl-in" href={pdf(c.level)} download><Icon name="download" size={16} />Descargar este temario en PDF</a>
+        </div>
+
+        <form class="dlg-body only-f enroll" id={`f-${c.id}`} novalidate>
+          <p class="step">Completa tus datos y te confirmamos el cupo y los datos de pago por WhatsApp.</p>
+          <fieldset class="plan">
+            <legend>¿Cómo te inscribes?</legend>
+            <label class="opt"><input type="radio" name="modalidad" value="individual" checked /><span><strong>Solo yo</strong><em>{bs(c.priceSolo)}</em></span></label>
+            <label class="opt"><input type="radio" name="modalidad" value="grupo" /><span><strong>Con mi equipo ({format.groupMin}+ personas)</strong><em>{bs(c.priceGroup)} c/u</em></span></label>
+          </fieldset>
+          <div class="grp-fields" hidden>
+            <div class="f"><label for={`n-${c.id}`}>¿Cuántas personas?</label><input id={`n-${c.id}`} name="personas" type="number" min={format.groupMin} value={format.groupMin} inputmode="numeric" data-err={`en-${c.id}`} /><p class="err" id={`en-${c.id}`} hidden>El precio de grupo es desde {format.groupMin} personas.</p></div>
+            <div class="f"><label for={`o-${c.id}`}>Empresa o institución</label><input id={`o-${c.id}`} name="empresa" autocomplete="organization" /></div>
+          </div>
+          <div class="fields2">
+            <div class="f full"><label for={`nm-${c.id}`}>Nombre completo <span aria-hidden="true">*</span></label><input id={`nm-${c.id}`} name="nombre" autocomplete="name" data-req data-err={`enm-${c.id}`} /><p class="err" id={`enm-${c.id}`} hidden>Escribe tu nombre completo.</p></div>
+            <div class="f"><label for={`em-${c.id}`}>Correo <span aria-hidden="true">*</span></label><input id={`em-${c.id}`} name="email" type="email" autocomplete="email" placeholder="tu@correo.com" data-req data-err={`eem-${c.id}`} /><p class="err" id={`eem-${c.id}`} hidden>Revisa el correo: falta la @ o el dominio.</p></div>
+            <div class="f"><label for={`wa-${c.id}`}>WhatsApp <span aria-hidden="true">*</span></label><input id={`wa-${c.id}`} name="whatsapp" type="tel" autocomplete="tel" placeholder="+591 7…" data-req data-err={`ewa-${c.id}`} /><p class="err" id={`ewa-${c.id}`} hidden>Lo necesitamos para confirmar tu cupo.</p></div>
+          </div>
+          <fieldset class="pay">
+            <legend>Forma de pago</legend>
+            <label class="chip"><input type="radio" name="pago" value="QR" checked /><span>QR</span></label>
+            <label class="chip"><input type="radio" name="pago" value="Transferencia" /><span>Transferencia</span></label>
+          </fieldset>
+          <div class="total" aria-live="polite"><span>Total estimado</span><strong data-total>{bs(c.priceSolo)}</strong></div>
+        </form>
+
+        <div class="dlg-body only-d done" role="status" aria-live="polite">
+          <Icon name="check-circle" size={44} />
+          <h3 data-done-title>¡Listo!</h3>
+          <p data-done-text>Te escribiremos durante el día para confirmar tu cupo y enviarte los datos de pago.</p>
+          <ul class="next">
+            <li><span>1</span>Te confirmamos el cupo por WhatsApp durante el día.</li>
+            <li><span>2</span>Pagas por QR o transferencia.</li>
+            <li><span>3</span>Recibes el acceso al grupo y a la carpeta de Google Drive.</li>
+          </ul>
+        </div>
+
+        <footer class="dlg-foot">
+          <div class="only-t foot-row">
+            <button type="button" class="btn btn-primary" data-go="form"><Icon name="check-circle" />Inscribirme</button>
+            <p class="foot-note">Pago por QR o transferencia · ¿Dudas? Escríbenos en el siguiente paso.</p>
+          </div>
+          <div class="only-f foot-row">
+            <button type="submit" class="btn btn-primary" form={`f-${c.id}`}><Icon name="message" /><span class="lbl">Enviar inscripción</span></button>
+            <button type="button" class="btn-link" data-go="temario"><Icon name="arrow-right" size={16} class="back" />Volver al temario</button>
+          </div>
+          <div class="only-d foot-row">
+            <button type="button" class="btn btn-primary" data-close>Listo</button>
+            <a class="btn-link" data-wa-again href={waLink()} target="_blank" rel="noopener" hidden>¿No se abrió WhatsApp? Ábrelo aquí</a>
+          </div>
+        </footer>
+      </div>
+    </dialog>
+  ))}
+
   <section class="section section-alt" aria-labelledby="fmt">
     <div class="container">
-      <SectionHead id="fmt" center eyebrow="Formatos" icon="layers" title="Para instituciones, empresas y personas" />
+      <SectionHead id="fmt" center eyebrow="Formatos" icon="layers" title="Para personas, empresas y universidades" />
       <div class="grid grid-3">
         {formats.map((f) => (
           <article class="card reveal">
             <div class="icon-chip"><Icon name={f.icon} /></div>
-            <p class="who">{f.who}</p>
+            <p class="who-k">{f.who}</p>
             <h3>{f.t}</h3>
             <p>{f.d}</p>
           </article>
@@ -96,22 +178,263 @@ const taught = ['Universidad Católica Boliviana · Posgrado', 'Industrias Venad
     </div>
   </section>
 
-  <CtaBand title="¿Quieres llevar un curso a tu institución?" lead="Armamos el programa según tu público, horas disponibles y nivel de partida." />
+  <section id="historial" class="section" aria-labelledby="his">
+    <div class="container">
+      <SectionHead id="his" center eyebrow="Historial y alianzas" icon="handshake" title="Dónde hemos enseñado"
+        lead="Cursos que ya dictamos, instituciones aliadas y lo que viene." />
+      <dl class="a-stats reveal">
+        {stats.filter((x) => x.academy).map((x) => (
+          <div><dd><span data-count={x.count} data-prefix={x.prefix}>{x.prefix}{x.count}</span></dd><dt>{x.label}</dt></div>
+        ))}
+      </dl>
+      <ol class="timeline">
+        {history.map((h) => (
+          <li class:list={['tl reveal', { up: h.upcoming }]}>
+            <span class="tl-dot" aria-hidden="true"></span>
+            <div class="tl-card">
+              <div class="tl-top"><span class="tl-status">{h.status}</span>{h.ally && <span class="tl-ally"><Icon name="handshake" size={13} />Alianza</span>}<span class="tl-when">{h.when}</span></div>
+              <h3>{h.title}</h3>
+              <p>{h.place}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section id="faq" class="section section-alt" aria-labelledby="faq-t">
+    <div class="container faq-wrap">
+      <SectionHead id="faq-t" center eyebrow="Preguntas frecuentes" icon="sparkles" title="Antes de inscribirte" />
+      <div class="faq">
+        {faqs.map((f, i) => (
+          <details class="reveal" open={i === 0}>
+            <summary>{f.q}<span class="pm" aria-hidden="true"></span></summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+      <p class="faq-more reveal">¿Otra duda? <a href={talk} target="_blank" rel="noopener">Conversa con nosotros</a></p>
+    </div>
+  </section>
+
+  <CtaBand tema="academy" title="¿Quieres llevar un curso a tu equipo o institución?" lead="Conversemos: adaptamos el programa a tu público, horarios y nivel de partida." />
 </Base>
 
+<script>
+  import { validate, deliver, setBusy, waUrl } from '../scripts/forms';
+  const fmt = (n: number) => `Bs ${String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+
+  document.querySelectorAll<HTMLButtonElement>('[data-open]').forEach((b) => {
+    const dlg = document.getElementById(b.dataset.open!) as HTMLDialogElement | null;
+    b.addEventListener('click', () => {
+      dlg?.querySelector<HTMLElement>('.dlg-in')?.setAttribute('data-view', 'temario');
+      dlg?.showModal();
+    });
+  });
+
+  document.querySelectorAll<HTMLDialogElement>('dialog.dlg').forEach((d) => {
+    const inner = d.querySelector<HTMLElement>('.dlg-in')!;
+    const form = d.querySelector<HTMLFormElement>('form.enroll')!;
+    const grp = form.querySelector<HTMLElement>('.grp-fields')!;
+    const n = grp.querySelector<HTMLInputElement>('input[name="personas"]')!;
+    const total = form.querySelector<HTMLElement>('[data-total]')!;
+    const solo = Number(d.dataset.solo), group = Number(d.dataset.group);
+    const submit = d.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+    const go = (view: string) => {
+      inner.dataset.view = view;
+      (view === 'form' ? form.querySelector<HTMLInputElement>('input[name="nombre"]') : view === 'done' ? d.querySelector<HTMLElement>('.only-d [data-close]') : d.querySelector<HTMLElement>('[data-go="form"]'))?.focus();
+      inner.querySelectorAll<HTMLElement>('.dlg-body').forEach((b) => (b.scrollTop = 0));
+    };
+    d.querySelectorAll<HTMLElement>('[data-go]').forEach((b) => b.addEventListener('click', () => go(b.dataset.go!)));
+    d.querySelectorAll('[data-close]').forEach((x) => x.addEventListener('click', () => d.close()));
+    d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
+
+    const recalc = () => {
+      const isGroup = form.querySelector<HTMLInputElement>('input[name="modalidad"]:checked')?.value === 'grupo';
+      grp.hidden = !isGroup;
+      if (isGroup) n.setAttribute('data-req', ''); else n.removeAttribute('data-req');
+      const people = isGroup ? Math.max(Number(n.value) || 0, 0) : 1;
+      total.textContent = isGroup ? `${fmt(group * people)} (${people} × ${fmt(group)})` : fmt(solo);
+    };
+    form.addEventListener('change', recalc);
+    n.addEventListener('input', recalc);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      recalc();
+      if (!validate(form)) return;
+      const fd = new FormData(form);
+      const isGroup = fd.get('modalidad') === 'grupo';
+      const text = [
+        `Hola Prometeo Academy, quiero inscribirme en "${d.dataset.course}" (${d.dataset.level}).`,
+        `Nombre: ${fd.get('nombre')}`,
+        `Correo: ${fd.get('email')}`,
+        `WhatsApp: ${fd.get('whatsapp')}`,
+        isGroup ? `Modalidad: grupo de ${fd.get('personas')} personas${fd.get('empresa') ? ` (${fd.get('empresa')})` : ''}` : 'Modalidad: individual',
+        `Pago: ${fd.get('pago')}`,
+        `Total estimado: ${total.textContent}`,
+      ].join('\n');
+      setBusy(submit, true, 'Enviar inscripción');
+      try {
+        const saved = await deliver(form, text, `Inscripción · ${d.dataset.course}`, { curso: d.dataset.course!, nivel: d.dataset.level!, total: total.textContent ?? '' });
+        d.querySelector<HTMLElement>('[data-done-title]')!.textContent = `¡Listo, ${String(fd.get('nombre')).trim().split(' ')[0]}!`;
+        d.querySelector<HTMLElement>('[data-done-text]')!.textContent = (saved ? 'Recibimos tu inscripción. ' : '') +
+          'Te abrimos WhatsApp con tu inscripción lista: envía el mensaje para reservar tu cupo.';
+        const again = d.querySelector<HTMLAnchorElement>('[data-wa-again]')!;
+        again.hidden = false;
+        again.href = waUrl(text);
+        go('done');
+      } catch {
+        alert('No pudimos enviar la inscripción. Escríbenos por WhatsApp y te ayudamos.');
+      } finally {
+        setBusy(submit, false, 'Enviar inscripción');
+      }
+    });
+    d.addEventListener('close', () => { inner.dataset.view = 'temario'; });
+    recalc();
+  });
+</script>
+
 <style>
-  .academy-hero { background: linear-gradient(135deg, #1A0E3B 0%, #1F2A6B 55%, #1A0E3B 100%); }
-  .taught { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; margin-top: 44px; align-items: center; }
-  .taught li { font-size: 13px; padding: 7px 14px; border-radius: 50px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); color: rgba(255,255,255,.88); }
-  .taught .taught-label { background: none; border: 0; padding-left: 0; color: rgba(255,255,255,.6); }
-  .course { display: flex; flex-direction: column; }
-  .course .icon-chip { margin: 0; background: var(--c-academy-bg); color: var(--c-academy); }
-  .course:hover .icon-chip { background: var(--c-academy); color: #fff; }
-  .course-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-  .level { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--c-academy); }
-  .meta { list-style: none; margin: 18px 0 4px; display: flex; flex-direction: column; gap: 6px; }
+  .a-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 720px; margin: 0 auto 40px; text-align: center; }
+  .a-stats div { background: var(--purple-light); border-radius: 18px; padding: 18px 10px; }
+  .a-stats dd { margin: 0; font-family: var(--font-display); font-size: 40px; font-weight: 800; letter-spacing: -1.5px; color: var(--purple-dark); font-variant-numeric: tabular-nums; }
+  .a-stats dt { font-size: 13.5px; color: var(--gray-mid); }
+  @media (max-width: 520px) { .a-stats dd { font-size: 30px; } }
+  .dl { display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; font-size: 14px; font-weight: 600; color: var(--purple-dark); text-decoration: none; padding: 8px; border-radius: 10px; }
+  .dl:hover { background: var(--purple-light); }
+  .dl-in { align-self: flex-start; margin-top: 18px; background: var(--purple-light); padding: 10px 16px; }
+  .a-hero { display: grid; grid-template-columns: 1.3fr 1fr; gap: 56px; align-items: end; position: relative; z-index: 1; }
+  .facts { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .facts li { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); border-radius: 18px; padding: 18px; backdrop-filter: blur(8px); }
+  .facts strong { display: block; font-family: var(--font-display); font-size: 22px; color: #fff; }
+  .facts span { font-size: 13px; color: rgba(255,255,255,.7); }
+  @media (max-width: 900px) { .a-hero { grid-template-columns: 1fr; } }
+
+  .course { display: flex; flex-direction: column; gap: 4px; }
+  .course.featured { border: 2px solid var(--purple); box-shadow: var(--shadow-lg); }
+  .ribbon { position: absolute; top: 18px; right: -34px; transform: rotate(35deg); background: var(--purple); color: #fff; font-size: 11px; font-weight: 700; padding: 5px 40px; }
+  .course .icon-chip { margin: 0; }
+  .course-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .featured .course-top { padding-right: 50px; }
+  .level { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--purple); }
+  .course h3 { font-size: 20px; }
+  .price { display: flex; flex-direction: column; gap: 6px; margin: 18px 0 6px; padding: 16px; border-radius: 14px; background: var(--tint); }
+  .price div { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .amt { font-family: var(--font-display); font-weight: 800; font-size: 30px; letter-spacing: -1px; color: var(--charcoal); }
+  .amt.sm { font-size: 20px; color: var(--purple-dark); }
+  .per { font-size: 13px; color: var(--gray-mid); }
+  .meta { list-style: none; margin: 12px 0 20px; display: flex; flex-direction: column; gap: 7px; }
   .meta li { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--gray-dark); }
-  .meta :global(svg) { color: var(--c-academy); }
-  .course .btn { margin-top: 24px; }
-  .who { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--purple-dark) !important; margin-bottom: 6px; }
+  .meta :global(svg) { color: var(--purple); }
+  .course .btn { margin-top: auto; width: 100%; }
+  .fine { text-align: center; font-size: 13px; color: var(--gray-mid); margin-top: 26px; }
+  .who-k { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--purple-dark) !important; margin-bottom: 6px; }
+
+  /* Diálogo de temario */
+  .dlg { width: min(860px, calc(100vw - 24px)); max-height: calc(100dvh - 32px); border-radius: 24px; background: #fff; color: var(--charcoal); box-shadow: 0 40px 100px rgba(0,0,0,.4); }
+  .dlg[open] { animation: pop .35s var(--ease-out); }
+  @keyframes pop { from { opacity: 0; transform: translateY(20px) scale(.97); } }
+  .dlg-in { display: flex; flex-direction: column; max-height: calc(100dvh - 32px); }
+  .dlg-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; padding: 26px 28px; background: var(--hero-grad); color: #fff; }
+  .dlg-k { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--purple-pale); margin-bottom: 6px; }
+  .dlg-head h2 { font-size: clamp(22px, 3vw, 30px); letter-spacing: -.8px; }
+  .x { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(255,255,255,.14); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .x:hover { background: rgba(255,255,255,.26); }
+  .dlg-body { overflow-y: auto; overscroll-behavior: contain; padding: 24px 28px; }
+  .dlg-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .box { background: var(--tint); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; }
+  .box span { font-size: 12px; color: var(--gray-mid); }
+  .box strong { font-family: var(--font-display); font-size: 20px; color: var(--purple-dark); }
+  .box em { font-style: normal; font-size: 12px; color: var(--gray-mid); }
+  .who { font-size: 15px; color: var(--gray-dark); margin-bottom: 8px; }
+  .mods { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
+  details { border: 1px solid var(--purple-light); border-radius: 14px; overflow: hidden; }
+  summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; font-family: var(--font-display); font-weight: 700; font-size: 16px; background: var(--tint); min-height: 52px; }
+  summary::-webkit-details-marker { display: none; }
+  summary :global(.chev) { transition: transform var(--trans); color: var(--purple); flex: none; }
+  details[open] summary :global(.chev) { transform: rotate(90deg); }
+  details ol { list-style: none; padding: 8px 18px 16px; display: flex; flex-direction: column; gap: 14px; }
+  details ol > li { display: flex; gap: 14px; }
+  .sn { flex: none; width: 40px; height: 28px; border-radius: 8px; background: var(--purple-light); color: var(--purple-dark); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  details ol strong { font-size: 15px; }
+  details ul { margin-top: 4px; padding-left: 18px; color: var(--gray-mid); font-size: 14px; }
+  .dlg-foot { padding: 18px 28px; border-top: 1px solid var(--purple-light); background: #fff; }
+  .foot-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; }
+  .foot-note { font-size: 13px; color: var(--gray-mid); }
+  .dlg-in:not([data-view='temario']) .only-t, .dlg-in:not([data-view='form']) .only-f, .dlg-in:not([data-view='done']) .only-d { display: none !important; }
+  .btn-link { display: inline-flex; align-items: center; gap: 6px; background: none; border: 0; font: inherit; font-weight: 600; color: var(--purple-dark); cursor: pointer; min-height: 44px; padding: 0 6px; }
+  .btn-link :global(.back) { transform: rotate(180deg); }
+  .enroll { position: relative; }
+  .step { color: var(--gray-mid); font-size: 15px; margin-bottom: 18px; }
+  .enroll fieldset { border: 0; padding: 0; margin: 0 0 18px; }
+  .enroll legend { font-family: var(--font-display); font-weight: 700; font-size: 16px; margin-bottom: 10px; }
+  .plan { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .plan legend { grid-column: 1 / -1; }
+  @media (max-width: 560px) { .plan { grid-template-columns: 1fr; } }
+  .opt { position: relative; cursor: pointer; }
+  .opt input, .chip input { position: absolute; opacity: 0; pointer-events: none; }
+  .opt span { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; border-radius: 14px; border: 1.5px solid var(--purple-light); transition: border-color var(--trans), background var(--trans); min-height: 64px; }
+  .opt em { font-style: normal; font-family: var(--font-display); font-weight: 700; color: var(--purple-dark); }
+  .opt input:checked + span { border-color: var(--purple); background: var(--tint); box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / .15); }
+  .opt input:focus-visible + span, .chip input:focus-visible + span { outline: 3px solid var(--purple); outline-offset: 2px; }
+  .grp-fields, .fields2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+  @media (max-width: 560px) { .grp-fields, .fields2 { grid-template-columns: 1fr; } }
+  .f { display: flex; flex-direction: column; gap: 6px; }
+  .f.full { grid-column: 1 / -1; }
+  .f label { font-size: 14px; font-weight: 600; }
+  .f label span { color: var(--purple); }
+  .enroll input:not([type='radio']) { font: inherit; font-size: 16px; padding: 12px 14px; min-height: 48px; border-radius: 12px; border: 1.5px solid #D9DEF0; }
+  .enroll input:not([type='radio']):focus { outline: none; border-color: var(--purple); box-shadow: 0 0 0 4px rgb(var(--accent-rgb) / .15); }
+  .enroll [aria-invalid='true'] { border-color: #C92A2A !important; }
+  .err { font-size: 13px; color: #C92A2A; }
+  .pay { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pay legend { width: 100%; }
+  .chip { position: relative; cursor: pointer; }
+  .chip span { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 99px; border: 1.5px solid var(--purple-light); font-weight: 600; font-size: 14px; }
+  .chip input:checked + span { background: var(--purple); border-color: var(--purple); color: #fff; }
+  .total { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; border-radius: 14px; background: var(--tint); }
+  .total span { font-size: 14px; color: var(--gray-mid); }
+  .total strong { font-family: var(--font-display); font-size: 20px; color: var(--purple-dark); text-align: right; }
+  .done { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 48px 28px; color: var(--purple); }
+  .done h3 { color: var(--charcoal); font-size: 26px; }
+  .done p { color: var(--gray-mid); max-width: 440px; }
+  .next { list-style: none; margin-top: 14px; display: flex; flex-direction: column; gap: 10px; text-align: left; }
+  .next li { display: flex; gap: 12px; align-items: center; color: var(--charcoal); font-size: 15px; }
+  .next span { width: 28px; height: 28px; flex: none; border-radius: 50%; background: var(--purple-light); color: var(--purple-dark); font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+  @media (max-width: 560px) { .dlg-foot .btn { width: 100%; } .foot-note { text-align: center; width: 100%; } .dlg-head, .dlg-body, .dlg-foot { padding-left: 18px; padding-right: 18px; } }
+
+  /* FAQ */
+  .faq-wrap { max-width: 860px; }
+  .faq { display: flex; flex-direction: column; gap: 10px; }
+  .faq details { background: #fff; border: 1px solid var(--purple-light); border-radius: 16px; }
+  .faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 22px; font-family: var(--font-display); font-weight: 600; font-size: 17px; min-height: 60px; background: none; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .pm { position: relative; width: 28px; height: 28px; flex: none; border-radius: 50%; background: var(--purple-light); }
+  .pm::before, .pm::after { content: ''; position: absolute; left: 8px; right: 8px; top: 13px; height: 2px; background: var(--purple); border-radius: 2px; transition: transform var(--trans); }
+  .pm::after { transform: rotate(90deg); }
+  .faq details[open] .pm::after { transform: rotate(0); }
+  .faq details p { padding: 0 22px 20px; color: var(--gray-mid); font-size: 15.5px; }
+  .faq-more { text-align: center; margin-top: 24px; color: var(--gray-mid); }
+  .faq-more a { display: inline-block; padding: 10px 4px; font-weight: 600; }
+
+  /* Línea de tiempo */
+  .timeline { list-style: none; padding: 0; margin: 0 auto; max-width: 820px; position: relative; }
+  .timeline::before { content: ''; position: absolute; left: 11px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(var(--purple), var(--purple-light)); }
+  .tl { position: relative; padding-left: 44px; margin-bottom: 18px; }
+  .tl-dot { position: absolute; left: 3px; top: 26px; width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 3px solid var(--purple); }
+  .tl.up .tl-dot { background: var(--purple); box-shadow: 0 0 0 6px var(--purple-light); }
+  .tl-card { background: #fff; border: 1px solid var(--purple-light); border-radius: 18px; padding: 20px 22px; transition: box-shadow var(--trans), transform var(--trans); }
+  .tl-card:hover { box-shadow: var(--shadow-md); transform: translateX(4px); }
+  .tl.up .tl-card { background: var(--hero-grad); color: #fff; border: 0; }
+  .tl.up .tl-card p { color: rgba(255,255,255,.75); }
+  .tl-top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .tl-status { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 99px; background: var(--purple-light); color: var(--purple-dark); }
+  .tl.up .tl-status { background: var(--purple-soft); color: var(--ink); }
+  .tl-ally { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--purple-dark); }
+  .tl-when { margin-left: auto; font-size: 13px; color: var(--gray-mid); }
+  .tl.up .tl-when { color: rgba(255,255,255,.7); }
+  .tl-card h3 { font-size: 18px; }
+  .tl-card p { font-size: 15px; color: var(--gray-mid); }
 </style>

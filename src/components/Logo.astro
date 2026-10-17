@@ -1,25 +1,33 @@
 ---
-// Logo provisional. Cuando tengas el definitivo, guarda el SVG en src/assets/logo.svg
-// y reemplaza el <span class="mark"> por <img src={logo.src} alt="" />.
-interface Props { sub?: string; light?: boolean }
-const { sub, light = false } = Astro.props;
+// Logo horizontal: ícono de la marca + nombre. Las líneas escriben "prometeo" + su nombre en su color;
+// Precio Justo es un proyecto aparte y va como "Precio Justo" con "by prometeo" debajo.
+import Mark from './Mark.astro';
+import type { Brand } from '../lib/brandIcons';
+interface Props { brand?: Brand; light?: boolean; size?: number }
+const { brand = 'prometeo', light = false, size = 38 } = Astro.props;
+const sub = { consulting: 'consulting', academy: 'academy', talks: 'talks' }[brand as string];
 ---
-<span class:list={['logo', { light }]}>
-  <span class="mark" aria-hidden="true">P</span>
-  <span class="word">Prometeo{sub && <span class="sub"> {sub}</span>}</span>
+<span class:list={['logo', `b-${brand}`, { light }]}>
+  <Mark brand={brand} size={size} class="mark" />
+  {brand === 'precio'
+    ? <span class="word pj">Precio Justo<span class="by">by prometeo</span></span>
+    : <span class="word">prometeo{sub && <span class="sub"> {sub}</span>}</span>}
 </span>
 
 <style>
-  .logo { display: inline-flex; align-items: center; gap: 10px; }
-  .mark {
-    width: 38px; height: 38px; border-radius: 11px; flex: none;
-    background: linear-gradient(135deg, var(--purple), var(--purple-dark));
-    color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 19px;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 14px rgba(124, 77, 255, .4);
-  }
-  .word { font-family: var(--font-display); font-weight: 700; font-size: 19px; letter-spacing: -.3px; color: var(--charcoal); }
-  .sub { color: var(--purple); }
+  .logo { display: inline-flex; align-items: center; gap: 9px; }
+  .logo :global(.mark) { flex: none; transition: transform .4s var(--ease-out); }
+  .logo:hover :global(.mark) { transform: translateY(-2px) scale(1.05); }
+  .word { white-space: nowrap; font-family: var(--font-display); font-weight: 700; font-size: 23px; letter-spacing: -1px; color: var(--ink); line-height: 1; }
+  .sub { font-weight: 400; letter-spacing: -.5px; }
+  .b-consulting .sub { color: var(--c-consulting); }
+  .b-academy .sub { color: var(--c-academy); }
+  .b-talks .sub { color: var(--c-talks); }
+  .pj { display: inline-flex; flex-direction: column; font-weight: 800; font-size: 21px; letter-spacing: -.6px; }
+  .by { font-size: 11.5px; font-weight: 600; letter-spacing: 0; color: var(--c-precio); margin-top: 3px; }
   .light .word { color: #fff; }
-  .light .sub { color: #C3AAFF; }
+  .light.b-consulting .sub { color: #B39DFF; }
+  .light.b-academy .sub { color: #91A7FF; }
+  .light.b-talks .sub { color: #FFA94D; }
+  .light .by { color: #63E6BE; }
 </style>

@@ -1,0 +1,140 @@
+---
+// Interfaz ilustrativa de la plataforma Precio Justo (datos de ejemplo).
+// Los filtros y la búsqueda funcionan de verdad para que el visitante "pruebe" la plataforma.
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+
+type Kind = 'leche' | 'yogur' | 'queso' | 'mantequilla' | 'farmacia';
+const products: { name: string; size: string; cat: Kind; best: number; prev: number; store: string; stores: number; trend: number[] }[] = [
+  { name: 'Leche entera UHT', size: '1 L', cat: 'leche', best: 8.9, prev: 9.8, store: 'Tienda A', stores: 4, trend: [10, 9.8, 9.8, 9.6, 9.4, 8.9] },
+  { name: 'Leche deslactosada', size: '946 ml', cat: 'leche', best: 10.5, prev: 10.5, store: 'Tienda C', stores: 3, trend: [10.2, 10.4, 10.5, 10.5, 10.5, 10.5] },
+  { name: 'Yogur bebible frutilla', size: '1 L', cat: 'yogur', best: 14.0, prev: 16.5, store: 'Tienda B', stores: 4, trend: [16, 16.5, 16.5, 15, 14.5, 14] },
+  { name: 'Yogur griego natural', size: '500 g', cat: 'yogur', best: 21.5, prev: 22.0, store: 'Tienda A', stores: 2, trend: [22, 22, 22.5, 22, 22, 21.5] },
+  { name: 'Queso criollo', size: '500 g', cat: 'queso', best: 32.0, prev: 35.0, store: 'Tienda D', stores: 3, trend: [35, 35, 34, 33, 32.5, 32] },
+  { name: 'Queso mozzarella', size: '400 g', cat: 'queso', best: 38.9, prev: 38.9, store: 'Tienda B', stores: 4, trend: [37, 38, 38.9, 38.9, 38.9, 38.9] },
+  { name: 'Mantequilla con sal', size: '200 g', cat: 'mantequilla', best: 17.5, prev: 19.0, store: 'Tienda C', stores: 4, trend: [19, 19, 18.5, 18, 17.5, 17.5] },
+  { name: 'Margarina vegetal', size: '250 g', cat: 'mantequilla', best: 9.9, prev: 9.9, store: 'Tienda A', stores: 3, trend: [9.5, 9.7, 9.9, 9.9, 9.9, 9.9] },
+  { name: 'Paracetamol 500 mg', size: 'x 10 tabletas', cat: 'farmacia', best: 6.5, prev: 7.5, store: 'Farmacia B', stores: 2, trend: [7.5, 7.5, 7.2, 7, 6.8, 6.5] },
+  { name: 'Protector solar FPS 50', size: '120 ml', cat: 'farmacia', best: 89, prev: 99, store: 'Farmacia A', stores: 2, trend: [99, 99, 95, 92, 90, 89] },
+];
+const shown = compact ? products.slice(0, 6) : products;
+const cats: { key: 'all' | Kind; label: string }[] = [
+  { key: 'all', label: 'Todos' }, { key: 'leche', label: 'Leches' }, { key: 'yogur', label: 'Yogures' }, { key: 'queso', label: 'Quesos' }, { key: 'mantequilla', label: 'Mantequillas' }, { key: 'farmacia', label: 'Farmacia' },
+];
+const fmt = (n: number) => n.toFixed(2).replace('.', ',');
+const spark = (t: number[]) => {
+  const min = Math.min(...t), max = Math.max(...t), r = max - min || 1;
+  return t.map((v, i) => `${(i / (t.length - 1)) * 60},${18 - ((v - min) / r) * 14}`).join(' ');
+};
+const icons: Record<Kind, string> = {
+  leche: '<path d="M22 14h20l4 10v30a4 4 0 0 1-4 4H22a4 4 0 0 1-4-4V24z" fill="#fff"/><path d="M22 14l-4 10h28l-4-10z" fill="#B2F2DA"/><rect x="18" y="34" width="28" height="12" fill="#12B886"/><rect x="26" y="6" width="12" height="8" rx="2" fill="#0B8A65"/>',
+  yogur: '<path d="M16 22h32l-4 34a4 4 0 0 1-4 3H24a4 4 0 0 1-4-3z" fill="#fff"/><rect x="14" y="14" width="36" height="9" rx="3" fill="#FF8FA3"/><circle cx="32" cy="40" r="7" fill="#FF8FA3"/>',
+  queso: '<path d="M8 44 50 22l6 22z" fill="#FFD43B"/><path d="M8 44h48v10H8z" fill="#FAB005"/><circle cx="30" cy="38" r="3" fill="#FAB005"/><circle cx="42" cy="34" r="2.5" fill="#FAB005"/>',
+  farmacia: '<rect x="14" y="20" width="36" height="24" rx="12" fill="#fff"/><path d="M32 20h6a12 12 0 0 1 0 24h-6z" fill="#12B886"/><rect x="21" y="30" width="8" height="4" rx="2" fill="#B2F2DA"/>',
+  mantequilla: '<rect x="10" y="26" width="44" height="22" rx="4" fill="#FFF3BF"/><rect x="10" y="26" width="44" height="8" rx="4" fill="#FFE066"/><rect x="18" y="38" width="28" height="4" rx="2" fill="#12B886"/>',
+};
+---
+<div class:list={['pt', { compact }]} data-pt data-tilt={compact ? undefined : true}>
+  <div class="chrome" aria-hidden="true"><i></i><i></i><i></i><span>preciojusto.prometeo · comparador</span></div>
+  <div class="app">
+    <div class="head">
+      <div class="brand"><span class="logo" aria-hidden="true">PJ</span><div><strong>Precio Justo</strong><small>by prometeo</small></div></div>
+      <label class="search">
+        <span class="sr-only">Buscar producto</span>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" placeholder="Buscar: leche, queso…" data-pt-search />
+      </label>
+    </div>
+    <div class="chips" role="group" aria-label="Filtrar por categoría">
+      {cats.map((c, i) => <button type="button" class="chip" data-pt-cat={c.key} aria-pressed={i === 0 ? 'true' : 'false'}>{c.label}</button>)}
+    </div>
+    <ul class="grid-p" data-pt-list>
+      {shown.map((p) => {
+        const off = Math.round((1 - p.best / p.prev) * 100);
+        return (
+          <li class="item" data-cat={p.cat} data-name={p.name.toLowerCase()}>
+            <div class="img"><svg viewBox="0 0 64 64" width="44" height="44" aria-hidden="true" set:html={icons[p.cat]} />{off > 0 && <span class="off">-{off}%</span>}</div>
+            <div class="info">
+              <strong>{p.name}</strong>
+              <small>{p.size} · {p.stores} tiendas</small>
+              <div class="row">
+                <span class="price">Bs {fmt(p.best)}</span>
+                {off > 0 && <s>Bs {fmt(p.prev)}</s>}
+              </div>
+              <div class="row2">
+                <span class="store">Mejor en {p.store}</span>
+                <svg class="spark" viewBox="0 0 60 20" aria-hidden="true"><polyline points={spark(p.trend)} fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </div>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+    <p class="empty" data-pt-empty hidden>No encontramos ese producto en el ejemplo. Prueba con "leche" o "queso".</p>
+    <p class="note">Vista ilustrativa con datos de ejemplo</p>
+  </div>
+</div>
+
+<style>
+  .pt { background: #fff; border-radius: 22px; overflow: hidden; box-shadow: 0 40px 90px rgba(3, 32, 26, .35), 0 0 0 1px rgba(11,138,101,.12); color: #10231D; width: 100%; }
+  .chrome { display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: #EFFAF6; font-size: 12px; color: #4C6B61; }
+  .chrome i { width: 10px; height: 10px; border-radius: 50%; background: #B2F2DA; }
+  .chrome span { margin-left: 8px; }
+  .app { padding: 18px; }
+  .head { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .logo { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #12B886, #087556); color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+  .brand strong { display: block; font-family: var(--font-display); font-size: 15px; line-height: 1.1; }
+  .brand small { font-size: 11px; color: #4C6B61; }
+  .search { flex: 1; min-width: 180px; max-width: 280px; display: flex; align-items: center; gap: 8px; background: #F1F7F5; border: 1px solid #D3EDE4; border-radius: 12px; padding: 0 12px; color: #4C6B61; }
+  .search input { border: 0; background: transparent; font: inherit; font-size: 14px; padding: 10px 0; width: 100%; color: #10231D; min-height: 40px; }
+  .search input:focus { outline: none; }
+  .search:focus-within { outline: 3px solid #12B886; outline-offset: 1px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0; }
+  .chip { font: inherit; font-size: 13px; font-weight: 600; padding: 8px 14px; min-height: 36px; border-radius: 99px; border: 1px solid #D3EDE4; background: #fff; color: #0B6B4F; cursor: pointer; transition: background var(--trans), color var(--trans); }
+  .chip:hover { background: #EFFAF6; }
+  .chip[aria-pressed='true'] { background: #0B8A65; border-color: #0B8A65; color: #fff; }
+  .grid-p { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .item { display: flex; gap: 12px; padding: 12px; border: 1px solid #E3F2EC; border-radius: 14px; transition: transform var(--trans), box-shadow var(--trans), border-color var(--trans); }
+  .item:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(11,138,101,.12); border-color: #B2F2DA; }
+  .img { position: relative; width: 64px; height: 64px; flex: none; border-radius: 12px; background: #F1F7F5; display: flex; align-items: center; justify-content: center; }
+  .off { position: absolute; top: -6px; right: -6px; background: #E8590C; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 99px; }
+  .info { min-width: 0; flex: 1; }
+  .info strong { display: block; font-size: 13px; line-height: 1.25; }
+  .info small { font-size: 11px; color: #4C6B61; }
+  .row { display: flex; align-items: baseline; gap: 6px; margin-top: 4px; }
+  .price { font-family: var(--font-display); font-weight: 800; font-size: 16px; color: #087556; }
+  s { font-size: 11px; color: #7A8F88; }
+  .row2 { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+  .store { font-size: 11px; color: #0B6B4F; font-weight: 600; }
+  .spark { width: 56px; height: 18px; color: #12B886; flex: none; }
+  .empty { padding: 20px; text-align: center; color: #4C6B61; font-size: 14px; }
+  .note { margin-top: 12px; font-size: 11px; color: #6B8079; text-align: right; }
+  .compact .grid-p { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-pt]').forEach((root) => {
+    const chips = [...root.querySelectorAll<HTMLButtonElement>('[data-pt-cat]')];
+    const items = [...root.querySelectorAll<HTMLElement>('[data-cat]')];
+    const search = root.querySelector<HTMLInputElement>('[data-pt-search]');
+    const empty = root.querySelector<HTMLElement>('[data-pt-empty]');
+    let cat = 'all';
+    const apply = () => {
+      const q = (search?.value ?? '').trim().toLowerCase();
+      let n = 0;
+      items.forEach((it) => {
+        const ok = (cat === 'all' || it.dataset.cat === cat) && (!q || (it.dataset.name ?? '').includes(q));
+        it.hidden = !ok;
+        if (ok) n++;
+      });
+      if (empty) empty.hidden = n > 0;
+    };
+    chips.forEach((c) => c.addEventListener('click', () => {
+      cat = c.dataset.ptCat ?? 'all';
+      chips.forEach((x) => x.setAttribute('aria-pressed', String(x === c)));
+      apply();
+    }));
+    search?.addEventListener('input', apply);
+  });
+</script>

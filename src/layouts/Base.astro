@@ -10,31 +10,35 @@ import '@fontsource/inter/700.css';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import WhatsAppFab from '../components/WhatsAppFab.astro';
 import { site } from '../data/site';
 import { url } from '../lib/url';
 
-interface Props { title?: string; description?: string }
-const { title, description = site.description } = Astro.props;
+export type Theme = 'prometeo' | 'consulting' | 'academy' | 'talks' | 'precio';
+interface Props { title?: string; description?: string; theme?: Theme; schema?: object }
+const { title, description = site.description, theme = 'prometeo', schema } = Astro.props;
 const fullTitle = title ? `${title} · Prometeo` : `Prometeo · ${site.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const themeColor = { prometeo: '#1A0E3B', consulting: '#1A0E3B', academy: '#0A1236', talks: '#1F0C04', precio: '#03201A' }[theme];
 ---
 <!doctype html>
-<html lang="es" class="no-js">
+<html lang="es" class="no-js" data-theme={theme}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
-    <meta name="theme-color" content="#1A0E3B" />
+    <link rel="icon" href={url(theme === 'prometeo' ? 'favicon.svg' : `favicon-${theme}.svg`)} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={url(`brand/instagram/perfil-${theme === 'precio' ? 'precio-justo' : theme}.png`)} />
+    <meta name="theme-color" content={themeColor} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_BO" />
     <meta property="og:site_name" content="Prometeo" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={new URL(url('og.jpg'), Astro.site)} />
+    <meta property="og:image" content={new URL(url(theme === 'prometeo' ? 'og.jpg' : `og-${theme}.jpg`), Astro.site)} />
     <meta name="twitter:card" content="summary_large_image" />
     <script is:inline>document.documentElement.classList.remove('no-js');</script>
     <script type="application/ld+json" set:html={JSON.stringify({
@@ -45,24 +49,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       email: site.email,
       address: { '@type': 'PostalAddress', addressLocality: 'Santa Cruz de la Sierra', addressCountry: 'BO' },
     })} />
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   </head>
   <body>
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
-    <Header />
+    <Header brand={theme} />
     <main id="contenido">
       <slot />
     </main>
     <Footer />
+    <WhatsAppFab />
     <script>
-      const els = document.querySelectorAll('.reveal');
-      if ('IntersectionObserver' in window) {
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); } });
-        }, { rootMargin: '0px 0px -8% 0px' });
-        els.forEach((el) => io.observe(el));
-      } else {
-        els.forEach((el) => el.classList.add('is-visible'));
-      }
+      import '../scripts/motion.ts';
     </script>
   </body>
 </html>

@@ -1,0 +1,74 @@
+---
+import Mark from './Mark.astro';
+// Panel ilustrativo (no son datos reales de clientes). Usa el color de acento de la página.
+const bars = [
+  { m: 'Ene', a: 52, b: 38 }, { m: 'Feb', a: 60, b: 45 }, { m: 'Mar', a: 48, b: 40 }, { m: 'Abr', a: 70, b: 52 },
+  { m: 'May', a: 66, b: 58 }, { m: 'Jun', a: 82, b: 61 }, { m: 'Jul', a: 76, b: 64 }, { m: 'Ago', a: 92, b: 70 },
+];
+---
+<div class="panel" data-hero-visual data-tilt role="img" aria-label="Ejemplo ilustrativo de un panel ejecutivo de Prometeo con ingresos, clientes activos, margen y ventas por mes">
+  <div class="top">
+    <span class="mk"><Mark size={26} variant="white" /></span>
+    <div><strong>Prometeo Analytics</strong><span>Panel ejecutivo · 2026</span></div>
+    <span class="live"><i></i>En vivo</span>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><span>Ingresos del mes</span><strong>Bs 4,2 M</strong><em class="up">▲ 18,4 %</em></div>
+    <div class="kpi"><span>Clientes activos</span><strong>1.840</strong><em class="up">▲ 7,2 %</em></div>
+    <div class="kpi"><span>Margen operativo</span><strong>34,6 %</strong><em class="down">▼ 1,1 %</em></div>
+  </div>
+  <div class="charts">
+    <div class="chart" data-grow>
+      <p>Ventas mensuales por unidad de negocio</p>
+      <div class="bars">
+        {bars.map((b) => (
+          <div class="col">
+            <div class="pair"><span data-bar class="ba" style={`height:${b.a}%`}></span><span data-bar class="bb" style={`height:${b.b}%`}></span></div>
+            <small>{b.m}</small>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div class="chart">
+      <p>Ingresos vs. presupuesto</p>
+      <svg viewBox="0 0 200 90" preserveAspectRatio="none" aria-hidden="true">
+        <defs><linearGradient id="hp-g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--purple)" stop-opacity=".35"/><stop offset="1" stop-color="var(--purple)" stop-opacity="0"/></linearGradient></defs>
+        <path d="M0 70 L25 62 L50 66 L75 48 L100 52 L125 36 L150 40 L175 22 L200 18 L200 90 L0 90Z" fill="url(#hp-g)"/>
+        <path class="line" d="M0 70 L25 62 L50 66 L75 48 L100 52 L125 36 L150 40 L175 22 L200 18" fill="none" stroke="var(--purple)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M0 64 L50 58 L100 50 L150 42 L200 34" fill="none" stroke="var(--purple-soft)" stroke-width="1.6" stroke-dasharray="4 4"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<style>
+  .panel { background: #fff; border-radius: 22px; padding: 20px; box-shadow: 0 40px 90px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.08); color: var(--charcoal); width: 100%; max-width: 560px; margin-left: auto; }
+  .top { display: flex; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--purple-light); }
+  .mk { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, var(--purple), var(--purple-dark)); color: #fff; font-family: var(--font-display); font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .top strong { display: block; font-family: var(--font-display); font-size: 14px; }
+  .top div span { font-size: 12px; color: var(--gray-mid); }
+  .live { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #0B8A65; background: #DDF5EC; padding: 5px 10px; border-radius: 99px; }
+  .live i { width: 7px; height: 7px; border-radius: 50%; background: #12B886; animation: pulse 1.6s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0; }
+  .kpi { background: var(--tint); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 2px; }
+  .kpi span { font-size: 11px; color: var(--gray-mid); }
+  .kpi strong { font-family: var(--font-display); font-size: 20px; letter-spacing: -.5px; }
+  .kpi em { font-style: normal; font-size: 11px; font-weight: 600; }
+  .up { color: #0B8A65; } .down { color: #C92A2A; }
+  .charts { display: grid; grid-template-columns: 1.3fr 1fr; gap: 10px; }
+  .chart { background: var(--tint); border-radius: 14px; padding: 12px; }
+  .chart p { font-size: 11px; font-weight: 600; color: var(--gray-dark); margin-bottom: 8px; }
+  .bars { display: flex; align-items: flex-end; gap: 6px; height: 110px; }
+  .col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; }
+  .pair { flex: 1; width: 100%; display: flex; align-items: flex-end; gap: 2px; }
+  .pair span { flex: 1; border-radius: 4px 4px 0 0; }
+  .ba { background: linear-gradient(180deg, var(--purple-mid), var(--purple)); }
+  .bb { background: var(--purple-pale); }
+  .col small { font-size: 9px; color: var(--gray-mid); }
+  svg { width: 100%; height: 110px; display: block; }
+  .line { stroke-dasharray: 320; stroke-dashoffset: 320; animation: draw 2s .8s var(--ease-out) forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @media (max-width: 520px) { .kpi strong { font-size: 16px; } .charts { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .line { stroke-dashoffset: 0; } }
+</style>

@@ -1,4 +1,5 @@
 ---
+import Mark from '../components/Mark.astro';
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
@@ -22,6 +23,8 @@ const services = [
   { icon: 'headset', t: 'Soporte continuo', d: 'Mantenimiento, monitoreo y evolución de tu solución después de la entrega.' },
 ] as const;
 
+// Sección "Algunos de nuestros desarrollos" (portafolio con capturas)
+const showPortfolio = false;
 const work = [
   { img: precios, t: 'Precios frente a la competencia', d: 'Precio ponderado, emparejamiento de productos y desvío por artículo.', area: 'Comercial' },
   { img: ventas1, t: 'Dashboard de ventas', d: 'Seguimiento de ventas, cumplimiento de metas y análisis por cliente.', area: 'Ventas' },
@@ -38,14 +41,14 @@ const steps = [
   { icon: 'headset', t: 'Soporte', d: 'Acompañamos, ajustamos y hacemos evolucionar la solución.' },
 ] as const;
 ---
-<Base title="Consulting · Business Intelligence y Power BI" description="Prometeo Consulting implementa dashboards ejecutivos, automatización de reportes e integración de datos con Power BI para empresas en Bolivia.">
+<Base theme="consulting" title="Consulting · Business Intelligence y Power BI" description="Prometeo Consulting implementa dashboards ejecutivos, automatización de reportes e integración de datos con Power BI para empresas en Bolivia.">
   <section class="page-hero" aria-labelledby="h">
     <div class="container">
-      <p class="badge-line"><Icon name="chart" />Prometeo Consulting</p>
-      <h1 id="h">Business Intelligence que tu gerencia <span class="gradient-text">sí usa</span></h1>
+      <p class="badge-line"><Mark brand="consulting" size={22} />Prometeo Consulting</p>
+      <h1 id="h" data-split>Business Intelligence que tu gerencia <span class="gradient-text">sí usa</span></h1>
       <p class="lead">Implementamos dashboards ejecutivos, automatizamos reportes e integramos tus sistemas con Power BI, desde el diagnóstico hasta el soporte.</p>
       <div class="btn-row">
-        <a class="btn btn-primary" href={bookingLink()} target="_blank" rel="noopener"><Icon name="calendar" />Agendar reunión</a>
+        <a class="btn btn-primary" href={bookingLink('consulting')}><Icon name="calendar" />Agendar reunión</a>
         <a class="btn btn-ghost" href="#propuesta"><Icon name="download" />Ver propuesta comercial</a>
       </div>
     </div>
@@ -57,7 +60,7 @@ const steps = [
         lead="Cubrimos todo el ciclo de inteligencia de negocio: de la integración de datos a la visualización ejecutiva y el soporte." />
       <div class="grid grid-3">
         {services.map((s) => (
-          <article class="card reveal">
+          <article class="card reveal" data-tilt>
             <div class="icon-chip"><Icon name={s.icon} /></div>
             <h3>{s.t}</h3>
             <p>{s.d}</p>
@@ -68,6 +71,8 @@ const steps = [
     </div>
   </section>
 
+  {/* Portafolio oculto por ahora: cambia showPortfolio a true para volver a mostrarlo */}
+  {showPortfolio && (
   <section class="section section-alt" aria-labelledby="port">
     <div class="container">
       <SectionHead id="port" center eyebrow="Portafolio" icon="presentation" title="Algunos de nuestros desarrollos"
@@ -86,6 +91,7 @@ const steps = [
       </div>
     </div>
   </section>
+  )}
 
   <section class="section" aria-labelledby="met">
     <div class="container">
@@ -113,7 +119,7 @@ const steps = [
 
   <Proposal />
   <Clients />
-  <CtaBand title="¿Hablamos de tu proyecto de BI?" lead="En una reunión de 30 minutos entendemos tu necesidad y te decimos qué modalidad te conviene." />
+  <CtaBand tema="consulting" title="¿Hablamos de tu proyecto de BI?" lead="En una reunión de 30 minutos entendemos tu necesidad y te decimos qué modalidad te conviene." />
 </Base>
 
 <style>

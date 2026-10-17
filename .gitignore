@@ -3,3 +3,8 @@ dist/
 .astro/
 .DS_Store
 .env
+
+# Material de trabajo que no va al sitio (videos, paquetes de marca, zips)
+Reel/
+Marca/
+*.zip

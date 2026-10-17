@@ -1,0 +1,10 @@
+---
+// Íconos de la familia Prometeo. 'prometeo' es "la llama de datos": barras que forman una llama y
+// una chispa naranja. Cada línea usa las mismas barras para su propio ícono y conserva la chispa.
+// variant 'color' = colores de marca · 'white' = sobre fondos oscuros o de color · 'mono' = un solo color (`color`)
+import { brandIcon, type Brand } from '../lib/brandIcons';
+interface Props { brand?: Brand; size?: number; variant?: 'color' | 'mono' | 'white'; color?: string; class?: string; label?: string }
+const { brand = 'prometeo', size = 40, variant = 'color', color = '#1A1033', class: cls, label } = Astro.props;
+const inner = brandIcon(brand, variant, color);
+---
+<svg class={cls} width={size} height={size} viewBox="0 0 64 64" role={label ? 'img' : undefined} aria-label={label} aria-hidden={label ? undefined : 'true'} set:html={inner} />

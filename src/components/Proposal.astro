@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import Mark from './Mark.astro';
 import SectionHead from './SectionHead.astro';
 import { site, bookingLink } from '../data/site';
 import { url } from '../lib/url';
@@ -10,7 +11,7 @@ const contents = [
   { icon: 'calendar', t: 'Cronograma', d: 'Plan de trabajo semana a semana.' },
   { icon: 'check-circle', t: 'Entregables', d: 'Todo lo que recibes al cierre.' },
   { icon: 'coins', t: 'Inversión', d: 'Costos por modalidad de contratación.' },
-  { icon: 'headset', t: 'Soporte', d: 'Acompañamiento después de la entrega.' },
+  { icon: 'search', t: 'Sesión de exploración', d: 'El primer paso para adaptar la propuesta.' },
 ] as const;
 
 // Semanas activas por actividad (1 a 6)
@@ -30,12 +31,12 @@ const weeks = [1, 2, 3, 4, 5, 6];
     <SectionHead
       id="prop-title" center eyebrow="Propuesta comercial" icon="file"
       title="Descarga nuestra propuesta comercial"
-      lead="Alcance, metodología, cronograma, entregables e inversión de un proyecto de Business Intelligence, en un solo documento."
+      lead="Nuestra propuesta estándar: alcance, metodología, cronograma, entregables e inversión. La ajustamos a tu empresa en una sesión de exploración."
     />
 
     <div class="doc reveal">
       <div class="doc-head">
-        <span class="doc-icon" aria-hidden="true">P</span>
+        <span class="doc-icon"><Mark size={32} /></span>
         <div>
           <strong>Propuesta comercial · Prometeo Consulting</strong>
           <span>Business Intelligence · {new Date().getFullYear()}</span>
@@ -73,14 +74,75 @@ const weeks = [1, 2, 3, 4, 5, 6];
     </div>
 
     <div class="btn-row center reveal">
-      <a class="btn btn-white" href={url(site.proposalFile)} download><Icon name="download" />Descargar propuesta (PDF)</a>
-      <a class="btn btn-ghost" href={bookingLink()} target="_blank" rel="noopener"><Icon name="calendar" />Agendar una reunión</a>
+      <a class="btn btn-white" href={url(site.proposalFile)} data-open-proposal><Icon name="download" />Descargar propuesta (PDF)</a>
+      <a class="btn btn-ghost" href={bookingLink('consulting')}><Icon name="calendar" />Agendar sesión de exploración</a>
     </div>
     <p class="note">Los precios finales dependen del alcance de cada proyecto.</p>
   </div>
 </section>
 
+<dialog id="dlg-propuesta" class="pdlg" aria-labelledby="pdlg-t">
+  <header class="pdlg-head">
+    <div>
+      <p class="pdlg-k">Propuesta comercial · PDF</p>
+      <h2 id="pdlg-t">Tu propuesta, a tu nombre</h2>
+      <p class="pdlg-sub">La preparamos con tus datos y la fecha de hoy. Así también podemos darte seguimiento.</p>
+    </div>
+    <button type="button" class="x" data-close aria-label="Cerrar"><Icon name="close" /></button>
+  </header>
+  <form class="pdlg-body" novalidate>
+    <label class="f"><span>Nombre completo <b aria-hidden="true">*</b></span>
+      <input name="nombre" autocomplete="name" data-req data-err="pe-nombre" placeholder="Ej.: María Rojas" />
+      <small id="pe-nombre" class="e" hidden>Escribe tu nombre.</small></label>
+    <label class="f"><span>Empresa</span>
+      <input name="empresa" autocomplete="organization" placeholder="Si la propuesta es para una empresa" /></label>
+    <label class="f"><span>WhatsApp o teléfono <b aria-hidden="true">*</b></span>
+      <input name="whatsapp" type="tel" autocomplete="tel" inputmode="tel" data-req data-err="pe-tel" placeholder="+591 7xx xxxxx" />
+      <small id="pe-tel" class="e" hidden>Escribe un número para contactarte.</small></label>
+    <label class="f"><span>Correo</span>
+      <input name="correo" type="email" autocomplete="email" placeholder="tu@empresa.com" /></label>
+    <p class="pdlg-note">En la portada irá: <strong>Preparada para</strong> (tu empresa o tu nombre), <strong>Contacto</strong> y la <strong>fecha de hoy</strong>.</p>
+    <button type="submit" class="btn btn-primary pdlg-go"><Icon name="download" /><span class="lbl">Descargar mi propuesta</span></button>
+    <p class="e" data-fail hidden>No pudimos preparar el PDF. <a href={url(site.proposalFile)} download>Descarga la versión general</a> o escríbenos por WhatsApp.</p>
+  </form>
+  <div class="pdlg-body done" data-done hidden>
+    <p class="ok"><Icon name="check-circle" size={28} /></p>
+    <h3>Listo, <span data-who></span>.</h3>
+    <p>Tu propuesta se está descargando. Te escribiremos durante el día para resolver dudas.</p>
+    <div class="row">
+      <button type="button" class="btn btn-ghost-dark" data-again><Icon name="download" />Descargar de nuevo</button>
+      <a class="btn btn-primary" href={bookingLink('consulting')}><Icon name="calendar" />Agendar sesión de exploración</a>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  import '../scripts/proposal';
+</script>
+
 <style>
+  .pdlg { width: min(560px, calc(100vw - 24px)); max-height: calc(100dvh - 32px); padding: 0; border: 0; border-radius: 24px; background: #fff; color: var(--charcoal); box-shadow: 0 40px 100px rgba(0,0,0,.4); }
+  .pdlg::backdrop { background: rgba(10, 6, 25, .6); backdrop-filter: blur(4px); }
+  .pdlg-head { display: flex; justify-content: space-between; gap: 16px; padding: 24px 26px; background: var(--hero-grad); color: #fff; }
+  .pdlg-k { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--purple-pale); margin-bottom: 6px; }
+  .pdlg-head h2 { font-size: 26px; letter-spacing: -.6px; }
+  .pdlg-sub { font-size: 14px; color: rgba(255,255,255,.75); margin-top: 6px; }
+  .pdlg .x { background: rgba(255,255,255,.12); border: 0; color: #fff; width: 40px; height: 40px; border-radius: 12px; cursor: pointer; flex: none; display: inline-flex; align-items: center; justify-content: center; }
+  .pdlg-body { padding: 22px 26px 26px; display: flex; flex-direction: column; gap: 14px; }
+  .f { display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; }
+  .f b { color: var(--purple); }
+  .f input { font: inherit; font-weight: 400; font-size: 16px; padding: 12px 14px; min-height: 48px; border-radius: 12px; border: 1.5px solid #DDD8EC; }
+  .f input:focus { outline: none; border-color: var(--purple); box-shadow: 0 0 0 4px rgb(var(--accent-rgb) / .15); }
+  .f input[aria-invalid='true'] { border-color: #C92A2A; }
+  .e { color: #C92A2A; font-size: 13px; font-weight: 500; }
+  .pdlg-note { font-size: 13px; color: var(--gray-mid); background: var(--tint); padding: 10px 12px; border-radius: 12px; }
+  .pdlg-go { width: 100%; min-height: 52px; }
+  .done { align-items: center; text-align: center; }
+  .done .ok { color: #12B886; }
+  .done h3 { font-size: 24px; }
+  .done p { color: var(--gray-mid); }
+  .done .row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 6px; }
+  .btn-ghost-dark { background: var(--tint); color: var(--purple-dark); }
   .doc { background: #fff; color: var(--charcoal); border-radius: var(--radius-lg); overflow: hidden; max-width: 680px; margin: 0 auto 64px; box-shadow: 0 24px 72px rgba(0,0,0,.35); }
   .doc-head { background: linear-gradient(135deg, var(--purple), var(--purple-deep)); color: #fff; padding: 20px 28px; display: flex; gap: 14px; align-items: center; }
   .doc-head div strong { display: block; font-size: 15px; }
@@ -98,7 +160,7 @@ const weeks = [1, 2, 3, 4, 5, 6];
   .muted strong { color: #fff; }
   .gantt-scroll { overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); margin-bottom: 44px; }
   .gantt { width: 100%; min-width: 620px; border-collapse: collapse; }
-  .gantt thead th { background: rgba(124,77,255,.28); padding: 13px 8px; font-size: 12px; font-weight: 700; letter-spacing: .5px; color: rgba(255,255,255,.9); text-align: center; }
+  .gantt thead th { background: rgb(var(--accent-rgb) / .28); padding: 13px 8px; font-size: 12px; font-weight: 700; letter-spacing: .5px; color: rgba(255,255,255,.9); text-align: center; }
   .gantt thead th:first-child { text-align: left; padding-left: 20px; width: 200px; }
   .gantt tbody tr { border-top: 1px solid rgba(255,255,255,.07); transition: background var(--trans); }
   .gantt tbody tr:hover { background: rgba(255,255,255,.04); }
@@ -106,12 +168,12 @@ const weeks = [1, 2, 3, 4, 5, 6];
   .gantt tbody th :global(svg) { color: var(--purple-soft); vertical-align: -2px; margin-right: 8px; }
   .gantt td { padding: 10px 4px; }
   .bar { display: block; height: 20px; border-radius: 6px; margin: 0 auto; width: 88%; }
-  .b1 { background: linear-gradient(90deg,#7C4DFF,#9B6EFF); }
-  .b2 { background: linear-gradient(90deg,#5E35B1,#7C4DFF); }
-  .b3 { background: linear-gradient(90deg,#3D1E9E,#5E35B1); }
-  .b4 { background: linear-gradient(90deg,#B39DFF,#7C4DFF); }
-  .b5 { background: linear-gradient(90deg,#7C4DFF,#5E35B1); }
-  .b6 { background: linear-gradient(90deg,#9B6EFF,#B39DFF); }
-  .b7 { background: linear-gradient(90deg,#EDE7F6,#B39DFF); }
+  .b1 { background: linear-gradient(90deg,var(--purple),var(--purple-mid)); }
+  .b2 { background: linear-gradient(90deg,var(--purple-dark),var(--purple)); }
+  .b3 { background: linear-gradient(90deg,var(--purple-deep),var(--purple-dark)); }
+  .b4 { background: linear-gradient(90deg,var(--purple-soft),var(--purple)); }
+  .b5 { background: linear-gradient(90deg,var(--purple),var(--purple-dark)); }
+  .b6 { background: linear-gradient(90deg,var(--purple-mid),var(--purple-soft)); }
+  .b7 { background: linear-gradient(90deg,var(--purple-light),var(--purple-soft)); }
   .note { text-align: center; margin-top: 18px; font-size: 13px; color: rgba(255,255,255,.6); }
 </style>

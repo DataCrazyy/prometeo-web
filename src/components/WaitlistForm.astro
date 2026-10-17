@@ -1,26 +1,62 @@
 ---
-import { site } from '../data/site';
-const useEndpoint = Boolean(site.formEndpoint);
-const action = useEndpoint ? site.formEndpoint : `mailto:${site.email}?subject=${encodeURIComponent('Lista de espera Prometeo Talks')}`;
 ---
-<form class="wl" action={action} method="post" enctype={useEndpoint ? undefined : 'text/plain'}>
+<form class="wl" data-waitlist novalidate>
   <p class="wl-title">Entérate del primer evento</p>
-  <label for="wl-name">Nombre</label>
-  <input id="wl-name" name="nombre" type="text" autocomplete="name" required />
-  <label for="wl-email">Correo electrónico</label>
-  <input id="wl-email" name="email" type="email" autocomplete="email" placeholder="tu@empresa.com" required />
+  <label for="wl-name">Nombre <span aria-hidden="true">*</span></label>
+  <input id="wl-name" name="nombre" type="text" autocomplete="name" data-req data-err="wl-e1" />
+  <p class="err" id="wl-e1" hidden>Escribe tu nombre.</p>
+  <label for="wl-email">Correo electrónico <span aria-hidden="true">*</span></label>
+  <input id="wl-email" name="email" type="email" autocomplete="email" placeholder="tu@empresa.com" data-req data-err="wl-e2" />
+  <p class="err" id="wl-e2" hidden>Revisa el correo: falta la @ o el dominio.</p>
+  <label for="wl-topic">¿Qué tema te gustaría escuchar? <span class="opt">(opcional)</span></label>
+  <input id="wl-topic" name="tema" type="text" placeholder="Ej.: IA aplicada a ventas" />
   <input type="hidden" name="origen" value="Prometeo Talks" />
-  <button class="btn btn-primary" type="submit">Avísame del primer evento</button>
+  <button class="btn btn-primary" type="submit"><span class="lbl">Avísame del primer evento</span></button>
   <p class="wl-hint">Solo te escribimos cuando haya fecha confirmada.</p>
+  <div class="wl-ok" data-ok hidden role="status">
+    <strong>¡Estás en la lista!</strong>
+    <p>Te avisaremos apenas tengamos fecha.</p>
+  </div>
 </form>
 
+<script>
+  import { validate, deliver, setBusy } from '../scripts/forms';
+  document.querySelectorAll<HTMLFormElement>('[data-waitlist]').forEach((form) => {
+    const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validate(form)) return;
+      const fd = new FormData(form);
+      const text = `Hola Prometeo, quiero unirme a la lista de Prometeo Talks.\nNombre: ${fd.get('nombre')}\nCorreo: ${fd.get('email')}${fd.get('tema') ? `\nTema que me interesa: ${fd.get('tema')}` : ''}`;
+      setBusy(btn, true, 'Avísame del primer evento');
+      try {
+        const saved = await deliver(form, text, 'Lista de espera · Prometeo Talks');
+        const ok = form.querySelector<HTMLElement>('[data-ok]')!;
+        ok.querySelector('p')!.textContent = (saved ? 'Ya estás registrado. ' : '') + 'Te abrimos WhatsApp con tus datos: envía el mensaje y te avisamos apenas haya fecha.';
+        ok.hidden = false;
+      } catch {
+        alert('No pudimos registrarte. Escríbenos por WhatsApp.');
+      } finally {
+        setBusy(btn, false, 'Avísame del primer evento');
+      }
+    });
+  });
+</script>
+
 <style>
-  .wl { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); border-radius: var(--radius-lg); padding: 30px; display: flex; flex-direction: column; gap: 8px; }
+  .wl { position: relative; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); border-radius: var(--radius-lg); padding: 30px; display: flex; flex-direction: column; gap: 8px; }
   .wl-title { font-family: var(--font-display); font-weight: 700; font-size: 20px; color: #fff; margin-bottom: 8px; }
-  label { font-size: 14px; color: rgba(255,255,255,.8); margin-top: 6px; }
-  input { font: inherit; min-height: 48px; padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,.25); background: rgba(10,6,28,.5); color: #fff; }
+  label { font-size: 14px; color: rgba(255,255,255,.85); margin-top: 6px; }
+  label span { color: var(--purple-soft); }
+  label .opt { color: rgba(255,255,255,.55); font-weight: 400; }
+  input { font: inherit; font-size: 16px; min-height: 48px; padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,.25); background: rgba(10,6,28,.5); color: #fff; }
   input::placeholder { color: rgba(255,255,255,.45); }
   input:focus-visible { outline: 3px solid var(--purple-soft); outline-offset: 1px; }
+  input[aria-invalid='true'] { border-color: #FF8787; }
+  .err { font-size: 13px; color: #FFA8A8; }
   .btn { margin-top: 14px; width: 100%; }
   .wl-hint { font-size: 13px; color: rgba(255,255,255,.6); text-align: center; margin-top: 4px; }
+  .wl-ok { position: absolute; inset: 0; border-radius: inherit; background: var(--ink-2); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; padding: 24px; color: #fff; }
+  .wl-ok strong { font-family: var(--font-display); font-size: 24px; }
+  .wl-ok p { color: rgba(255,255,255,.8); }
 </style>

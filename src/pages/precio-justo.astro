@@ -1,53 +1,56 @@
 ---
-import { Image } from 'astro:assets';
+import Mark from '../components/Mark.astro';
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import SectionHead from '../components/SectionHead.astro';
+import PriceTrackerMock from '../components/PriceTrackerMock.astro';
 import CtaBand from '../components/CtaBand.astro';
-import { waLink } from '../data/site';
-import precios from '../assets/work/precios-competencia.jpg';
+import { site, bookingLink } from '../data/site';
+
+const stores = ['Fidalga', 'Hipermaxi', 'Amarket', 'Farmacorp', 'Farmacias Chávez'];
 
 const steps = [
-  { icon: 'globe', t: 'Recolectamos', d: 'Robots de web scraping leen los precios publicados por tus competidores en sus tiendas en línea.' },
-  { icon: 'layers', t: 'Emparejamos', d: 'Cada artículo de la competencia se vincula con el tuyo equivalente, aunque el nombre cambie.' },
-  { icon: 'chart', t: 'Comparas y decides', d: 'Ves tu precio ponderado, el desvío por artículo y la tendencia en un dashboard listo.' },
+  { icon: 'globe', t: 'Recolectamos', d: 'Robots de web scraping leen todos los días los precios publicados en las tiendas en línea.' },
+  { icon: 'layers', t: 'Emparejamos', d: 'Cada producto se vincula con su equivalente en otras tiendas, aunque el nombre cambie.' },
+  { icon: 'trend', t: 'Comparas', d: 'Ves el mejor precio, el historial y los descuentos activos en un solo lugar.' },
 ] as const;
 
-const features = [
-  { icon: 'target', t: 'Precio ponderado vs. competencia', d: 'Un número por competidor para saber dónde estás.' },
-  { icon: 'search', t: 'Desvío por artículo', d: 'Lista ordenada de los productos con mayor diferencia.' },
-  { icon: 'trend', t: 'Historial y tendencia', d: 'Evolución de precios mes a mes para anticipar movimientos.' },
-  { icon: 'clock', t: 'Actualización automática', d: 'Sin capturas manuales. Frecuencia: [diaria / semanal].' },
+const audiences = [
+  {
+    icon: 'users', k: 'Para personas', t: 'Compra al mejor precio',
+    pts: ['Busca un producto y mira dónde está más barato', 'Descuentos activos marcados', 'Historial para saber si hoy conviene'],
+  },
+  {
+    icon: 'building', k: 'Para empresas', t: 'Monitorea a tu competencia',
+    pts: ['Tu precio frente a cada competidor', 'Desvío por artículo y alertas de cambios', 'Datos listos para Power BI o Excel'],
+  },
 ] as const;
-
-const sectors = ['Farmacias', 'Supermercados', 'Distribuidores de consumo masivo', 'Retail'];
 ---
-<Base title="Precio Justo · Monitoreo de precios de la competencia" description="Precio Justo usa web scraping para monitorear precios de la competencia y mostrarte, producto por producto, dónde estás caro o barato.">
+<Base theme="precio" title="Precio Justo by prometeo · Comparador y monitoreo de precios" description="Precio Justo by prometeo compara automáticamente los precios de supermercados y farmacias de Santa Cruz: Fidalga, Hipermaxi, Amarket, Farmacorp y Farmacias Chávez.">
   <section class="page-hero pj-hero" aria-labelledby="h">
-    <div class="container pj-grid">
-      <div>
-        <p class="badge-line pj-badge"><Icon name="tag" />Precio Justo · un producto Prometeo</p>
-        <h1 id="h">Tus precios frente a la competencia, <span class="pj-text">sin revisar tienda por tienda</span></h1>
-        <p class="lead">Precio Justo monitorea automáticamente los precios publicados por tus competidores y los compara con los tuyos, artículo por artículo.</p>
-        <div class="btn-row">
-          <a class="btn btn-pj" href={waLink('Hola, quiero una demo de Precio Justo.')} target="_blank" rel="noopener"><Icon name="presentation" />Solicitar demo</a>
-          <a class="btn btn-ghost" href="#como-funciona">Cómo funciona<Icon name="arrow-right" /></a>
-        </div>
+    <div class="container center-hero">
+      <p class="badge-line"><Mark brand="precio" size={22} />Precio Justo · un proyecto de Prometeo</p>
+      <h1 id="h" data-split>Sabe dónde está el <span class="gradient-text">precio justo</span>.</h1>
+      <p class="lead reveal">Comparamos automáticamente los precios de supermercados y farmacias de Santa Cruz, producto por producto, para personas y para empresas.</p>
+      <div class="btn-row center reveal">
+        <a class="btn btn-primary" href={site.precioJustoUrl} target="_blank" rel="noopener"><Icon name="search" />Buscar precios ahora</a>
+        <a class="btn btn-ghost" href={bookingLink('precio')}><Icon name="presentation" />Demo para empresas</a>
       </div>
-      <div class="pj-shot">
-        <Image src={precios} alt="Dashboard de Precio Justo con precio ponderado por competidor, desvío por artículo y tendencia" widths={[600, 1000]} sizes="(max-width: 960px) 92vw, 600px" loading="eager" />
-      </div>
+    </div>
+    <div id="plataforma" class="container mock-wrap">
+      <div data-hero-visual><PriceTrackerMock /></div>
+      <p class="try reveal"><Icon name="sparkles" size={15} />Vista de ejemplo: filtra o busca "leche". <a href={site.precioJustoUrl} target="_blank" rel="noopener">Abrir la plataforma real →</a></p>
     </div>
   </section>
 
-  <section id="como-funciona" class="section" aria-labelledby="cf">
+  <section class="section" aria-labelledby="cf">
     <div class="container">
       <SectionHead id="cf" center eyebrow="Cómo funciona" icon="workflow" title="De la web a tu decisión en tres pasos" />
       <ol class="grid grid-3 flow">
         {steps.map((s, i) => (
           <li class="card reveal">
             <span class="step-num">0{i + 1}</span>
-            <div class="icon-chip pj-chip"><Icon name={s.icon} /></div>
+            <div class="icon-chip"><Icon name={s.icon} /></div>
             <h3>{s.t}</h3>
             <p>{s.d}</p>
           </li>
@@ -56,42 +59,45 @@ const sectors = ['Farmacias', 'Supermercados', 'Distribuidores de consumo masivo
     </div>
   </section>
 
-  <section class="section section-alt" aria-labelledby="ft">
+  <section class="section section-alt" aria-labelledby="aud">
     <div class="container">
-      <SectionHead id="ft" center eyebrow="Qué obtienes" icon="check-circle" title="Lo que verás en tu dashboard" />
-      <div class="grid grid-4">
-        {features.map((f) => (
-          <article class="card reveal">
-            <div class="icon-chip pj-chip"><Icon name={f.icon} /></div>
-            <h3>{f.t}</h3>
-            <p>{f.d}</p>
+      <SectionHead id="aud" center eyebrow="Para quién" icon="target" title="Una plataforma, dos usos" />
+      <div class="grid grid-2">
+        {audiences.map((a) => (
+          <article class="aud card reveal" data-tilt>
+            <div class="icon-chip"><Icon name={a.icon} /></div>
+            <p class="aud-k">{a.k}</p>
+            <h3>{a.t}</h3>
+            <ul class="check-list">{a.pts.map((p) => <li><Icon name="check" />{p}</li>)}</ul>
           </article>
         ))}
       </div>
-      <div class="sectors reveal">
-        <p>Pensado para:</p>
-        <ul>{sectors.map((s) => <li>{s}</li>)}</ul>
+      <div class="coverage reveal">
+        <p>Comparamos precios de:</p>
+        <ul>{stores.map((st) => <li>{st}</li>)}<li class="soon">Más tiendas pronto</li></ul>
       </div>
     </div>
   </section>
 
-  <CtaBand title="Mira Precio Justo con tus propios productos" lead="Te mostramos una demo con un grupo de tus artículos frente a tus principales competidores." />
+  <CtaBand tema="precio" title="Mira Precio Justo con tus propios productos" lead="Te mostramos una demo con tus artículos frente a tus principales competidores." />
 </Base>
 
 <style>
-  .pj-hero { background: linear-gradient(135deg, #0D1F2A 0%, #0E3B33 50%, #1A0E3B 100%); }
-  .pj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 56px; align-items: center; position: relative; z-index: 1; }
-  .pj-badge { background: rgba(18,184,134,.18); border-color: rgba(18,184,134,.45); color: #A6F0D6; }
-  .pj-text { background: linear-gradient(90deg, #7EE8C4, #12B886); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-  .btn-pj { background: linear-gradient(135deg, #12B886, var(--c-precio)); color: #fff; box-shadow: 0 6px 22px rgba(18,184,134,.4); }
-  .btn-pj:hover { color: #fff; transform: translateY(-3px); box-shadow: 0 12px 36px rgba(18,184,134,.5); }
-  .pj-shot { border-radius: 18px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,.45); border: 4px solid rgba(255,255,255,.9); }
+  .center-hero { text-align: center; position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+  .center-hero h1 { font-size: clamp(42px, 6.4vw, 80px); letter-spacing: -2.5px; line-height: 1.02; max-width: 900px; }
+  .center-hero .lead { margin-left: auto; margin-right: auto; }
+  .pj-hero { padding-bottom: 96px; }
+  .mock-wrap { margin-top: 64px; position: relative; z-index: 1; perspective: 1600px; max-width: 1040px; }
+  .try { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-top: 18px; font-size: 14px; color: var(--purple-pale); }
+  .try a { color: #fff; font-weight: 600; padding: 8px 4px; }
   .flow { list-style: none; padding: 0; }
-  .step-num { position: absolute; top: 22px; right: 24px; font-family: var(--font-display); font-weight: 800; font-size: 40px; color: var(--c-precio-bg); line-height: 1; }
-  .pj-chip { background: var(--c-precio-bg); color: var(--c-precio); }
-  .card:hover .pj-chip { background: var(--c-precio); color: #fff; }
-  .sectors { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; margin-top: 44px; }
-  .sectors p { font-weight: 600; color: var(--gray-mid); }
-  .sectors ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
-  .sectors li { padding: 6px 14px; border-radius: 50px; background: #fff; border: 1px solid rgba(12,143,106,.3); color: var(--c-precio); font-size: 14px; font-weight: 600; }
+  .step-num { position: absolute; top: 22px; right: 24px; font-family: var(--font-display); font-weight: 800; font-size: 44px; color: var(--purple-light); line-height: 1; }
+  .aud { padding: 36px; }
+  .aud-k { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--purple) !important; margin-bottom: 4px; }
+  .aud h3 { font-size: 24px; margin-bottom: 16px; }
+  .coverage { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; margin-top: 40px; }
+  .coverage p { font-weight: 600; color: var(--gray-mid); }
+  .coverage ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+  .coverage li { padding: 7px 15px; border-radius: 50px; background: #fff; border: 1px solid rgb(var(--accent-rgb) / .3); color: var(--purple-dark); font-size: 14px; font-weight: 600; }
+  .coverage li.soon { border-style: dashed; color: var(--gray-mid); }
 </style>
