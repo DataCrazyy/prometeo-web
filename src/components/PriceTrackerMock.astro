@@ -1,5 +1,5 @@
 ---
-// Interfaz ilustrativa de la plataforma Precio Justo (datos de ejemplo).
+// Interfaz ilustrativa de la plataforma Precios Claros (datos de ejemplo).
 // Los filtros y la búsqueda funcionan de verdad para que el visitante "pruebe" la plataforma.
 interface Props { compact?: boolean }
 const { compact = false } = Astro.props;
@@ -17,7 +17,7 @@ const products: { name: string; size: string; cat: Kind; best: number; prev: num
   { name: 'Paracetamol 500 mg', size: 'x 10 tabletas', cat: 'farmacia', best: 6.5, prev: 7.5, store: 'Farmacia B', stores: 2, trend: [7.5, 7.5, 7.2, 7, 6.8, 6.5] },
   { name: 'Protector solar FPS 50', size: '120 ml', cat: 'farmacia', best: 89, prev: 99, store: 'Farmacia A', stores: 2, trend: [99, 99, 95, 92, 90, 89] },
 ];
-const shown = compact ? products.slice(0, 6) : products;
+const shown = compact ? products.slice(0, 4) : products;
 const cats: { key: 'all' | Kind; label: string }[] = [
   { key: 'all', label: 'Todos' }, { key: 'leche', label: 'Leches' }, { key: 'yogur', label: 'Yogures' }, { key: 'queso', label: 'Quesos' }, { key: 'mantequilla', label: 'Mantequillas' }, { key: 'farmacia', label: 'Farmacia' },
 ];
@@ -35,10 +35,10 @@ const icons: Record<Kind, string> = {
 };
 ---
 <div class:list={['pt', { compact }]} data-pt data-tilt={compact ? undefined : true}>
-  <div class="chrome" aria-hidden="true"><i></i><i></i><i></i><span>preciojusto.prometeo · comparador</span></div>
+  <div class="chrome" aria-hidden="true"><i></i><i></i><i></i><span>preciosclaros.prometeo · comparador</span></div>
   <div class="app">
     <div class="head">
-      <div class="brand"><span class="logo" aria-hidden="true">PJ</span><div><strong>Precio Justo</strong><small>by prometeo</small></div></div>
+      <div class="brand"><span class="logo" aria-hidden="true">PC</span><div><strong>Precios Claros</strong><small>by prometeo</small></div></div>
       <label class="search">
         <span class="sr-only">Buscar producto</span>
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -111,6 +111,13 @@ const icons: Record<Kind, string> = {
   .empty { padding: 20px; text-align: center; color: #4C6B61; font-size: 14px; }
   .note { margin-top: 12px; font-size: 11px; color: #6B8079; text-align: right; }
   .compact .grid-p { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+  @media (max-width: 640px) {
+    .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 12px -2px; padding-bottom: 2px; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip { flex: none; }
+    .compact:not(.filtered) .grid-p > :nth-child(n+3) { display: none !important; }
+    .pt:not(.compact):not(.filtered) .grid-p > :nth-child(n+5) { display: none !important; }
+  }
 </style>
 
 <script>
@@ -129,6 +136,8 @@ const icons: Record<Kind, string> = {
         if (ok) n++;
       });
       if (empty) empty.hidden = n > 0;
+      // En celular se muestra una lista corta solo mientras no hay filtro ni búsqueda
+      root.classList.toggle('filtered', cat !== 'all' || !!q);
     };
     chips.forEach((c) => c.addEventListener('click', () => {
       cat = c.dataset.ptCat ?? 'all';

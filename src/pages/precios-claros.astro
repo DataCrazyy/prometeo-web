@@ -1,0 +1,103 @@
+---
+import Mark from '../components/Mark.astro';
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import SectionHead from '../components/SectionHead.astro';
+import PriceTrackerMock from '../components/PriceTrackerMock.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site, bookingLink } from '../data/site';
+
+const stores = ['Fidalga', 'Hipermaxi', 'Amarket', 'Farmacorp', 'Farmacias Chávez'];
+
+const steps = [
+  { icon: 'globe', t: 'Recolectamos', d: 'Robots de web scraping leen todos los días los precios publicados en las tiendas en línea.' },
+  { icon: 'layers', t: 'Emparejamos', d: 'Cada producto se vincula con su equivalente en otras tiendas, aunque el nombre cambie.' },
+  { icon: 'trend', t: 'Comparas', d: 'Ves el mejor precio, el historial y los descuentos activos en un solo lugar.' },
+] as const;
+
+const audiences = [
+  {
+    icon: 'users', k: 'Para personas', t: 'Compra al mejor precio',
+    pts: ['Busca un producto y mira dónde está más barato', 'Descuentos activos marcados', 'Historial para saber si hoy conviene'],
+  },
+  {
+    icon: 'building', k: 'Para empresas', t: 'Monitorea a tu competencia',
+    pts: ['Tu precio frente a cada competidor', 'Desvío por artículo y alertas de cambios', 'Datos listos para Power BI o Excel'],
+  },
+] as const;
+---
+<Base theme="precio" title="Precios Claros by prometeo · Comparador y monitoreo de precios" description="Precios Claros by prometeo compara automáticamente los precios de supermercados y farmacias de Santa Cruz: Fidalga, Hipermaxi, Amarket, Farmacorp y Farmacias Chávez.">
+  <section class="page-hero pj-hero" aria-labelledby="h">
+    <div class="container center-hero">
+      <p class="badge-line"><Mark brand="precio" size={22} />Precios Claros · un proyecto de Prometeo</p>
+      <h1 id="h" data-split>Antes de comprar, mira los <span class="gradient-text">precios claros</span>.</h1>
+      <p class="lead reveal">Comparamos automáticamente los precios de supermercados y farmacias de Santa Cruz, producto por producto, para personas y para empresas.</p>
+      <div class="btn-row center reveal">
+        <a class="btn btn-primary" href={site.preciosClarosUrl} target="_blank" rel="noopener"><Icon name="search" />Buscar precios ahora</a>
+        <a class="btn btn-ghost" href={bookingLink('precio')}><Icon name="presentation" />Demo para empresas</a>
+      </div>
+    </div>
+    <div id="plataforma" class="container mock-wrap">
+      <div data-hero-visual><PriceTrackerMock /></div>
+      <p class="try reveal"><Icon name="sparkles" size={15} />Vista de ejemplo: filtra o busca "leche". <a href={site.preciosClarosUrl} target="_blank" rel="noopener">Abrir la plataforma real →</a></p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="cf">
+    <div class="container">
+      <SectionHead id="cf" center eyebrow="Cómo funciona" icon="workflow" title="De la web a tu decisión en tres pasos" />
+      <ol class="grid grid-3 flow m-swipe">
+        {steps.map((s, i) => (
+          <li class="card reveal">
+            <span class="step-num">0{i + 1}</span>
+            <div class="icon-chip"><Icon name={s.icon} /></div>
+            <h3>{s.t}</h3>
+            <p>{s.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section-alt" aria-labelledby="aud">
+    <div class="container">
+      <SectionHead id="aud" center eyebrow="Para quién" icon="target" title="Una plataforma, dos usos" />
+      <div class="grid grid-2">
+        {audiences.map((a) => (
+          <article class="aud card reveal" data-tilt>
+            <div class="icon-chip"><Icon name={a.icon} /></div>
+            <p class="aud-k">{a.k}</p>
+            <h3>{a.t}</h3>
+            <ul class="check-list">{a.pts.map((p) => <li><Icon name="check" />{p}</li>)}</ul>
+          </article>
+        ))}
+      </div>
+      <div class="coverage reveal">
+        <p>Comparamos precios de:</p>
+        <ul>{stores.map((st) => <li>{st}</li>)}<li class="soon">Más tiendas pronto</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand tema="precio" title="Mira Precios Claros con tus propios productos" lead="Te mostramos una demo con tus artículos frente a tus principales competidores." />
+</Base>
+
+<style>
+  .center-hero { text-align: center; position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+  .center-hero h1 { font-size: clamp(42px, 6.4vw, 80px); letter-spacing: -2.5px; line-height: 1.02; max-width: 900px; }
+  .center-hero .lead { margin-left: auto; margin-right: auto; }
+  .pj-hero { padding-bottom: 96px; }
+  .mock-wrap { margin-top: 64px; position: relative; z-index: 1; perspective: 1600px; max-width: 1040px; }
+  .try { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-top: 18px; font-size: 14px; color: var(--purple-pale); }
+  .try a { color: #fff; font-weight: 600; padding: 8px 4px; }
+  .flow { list-style: none; padding: 0; }
+  .step-num { position: absolute; top: 22px; right: 24px; font-family: var(--font-display); font-weight: 800; font-size: 44px; color: var(--purple-light); line-height: 1; }
+  .aud { padding: 36px; }
+  .aud-k { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--purple) !important; margin-bottom: 4px; }
+  .aud h3 { font-size: 24px; margin-bottom: 16px; }
+  .coverage { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; margin-top: 40px; }
+  .coverage p { font-weight: 600; color: var(--gray-mid); }
+  .coverage ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+  .coverage li { padding: 7px 15px; border-radius: 50px; background: #fff; border: 1px solid rgb(var(--accent-rgb) / .3); color: var(--purple-dark); font-size: 14px; font-weight: 600; }
+  .coverage li.soon { border-style: dashed; color: var(--gray-mid); }
+</style>

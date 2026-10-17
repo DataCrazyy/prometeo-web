@@ -27,7 +27,7 @@ const plans = [
   },
 ] as const;
 ---
-<div class="plans">
+<div class="plans m-swipe">
   {plans.map((p) => (
     <article class:list={['plan reveal', { featured: p.featured }]}>
       {p.featured && <span class="badge">Recomendado</span>}

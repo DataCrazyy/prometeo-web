@@ -57,6 +57,7 @@ const bars = [
   .kpi em { font-style: normal; font-size: 11px; font-weight: 600; }
   .up { color: #0B8A65; } .down { color: #C92A2A; }
   .charts { display: grid; grid-template-columns: 1.3fr 1fr; gap: 10px; }
+  @media (max-width: 640px) { .charts .chart + .chart { display: none; } }
   .chart { background: var(--tint); border-radius: 14px; padding: 12px; }
   .chart p { font-size: 11px; font-weight: 600; color: var(--gray-dark); margin-bottom: 8px; }
   .bars { display: flex; align-items: flex-end; gap: 6px; height: 110px; }

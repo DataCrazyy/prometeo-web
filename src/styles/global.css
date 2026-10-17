@@ -61,7 +61,7 @@
   --purple-soft: #FFA94D; --purple-pale: #FFD3A8; --purple-light: #FFEDE2; --accent-rgb: 217 72 15;
   --ink: #1F0C04; --ink-2: #4A1C08; --tint: #FFF6EF;
 }
-/* Precio Justo: verde */
+/* Precios Claros: verde */
 [data-theme='precio'] {
   --purple: #0B8A65; --purple-mid: #12B886; --purple-dark: #087556; --purple-deep: #055C43;
   --purple-soft: #63E6BE; --purple-pale: #B2F2DA; --purple-light: #DDF5EC; --accent-rgb: 11 138 101;
@@ -148,6 +148,20 @@ ul { margin: 0; padding: 0; }
 .grid-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
 .grid-3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
 .grid-4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+
+/* ── Celular: menos alto y más deslizable ── */
+.swipe-hint { display: none; }
+@media (max-width: 640px) {
+  .section { padding: 60px 0; }
+  .section-head { margin-bottom: 30px; }
+  .section-lead { font-size: 16px; }
+  /* Listas de tarjetas que en celular se deslizan de lado */
+  .m-swipe { display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; margin: 0 -24px; padding: 8px 24px 16px; scroll-padding: 0 24px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .m-swipe::-webkit-scrollbar { display: none; }
+  .m-swipe > * { flex: 0 0 84%; max-width: 360px; scroll-snap-align: start; }
+  .swipe-hint { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 4px; font-size: 13px; font-weight: 600; color: var(--gray-mid); }
+  .section-dark .swipe-hint { color: rgba(255,255,255,.6); }
+}
 
 .card {
   background: var(--white); border: 1px solid rgb(var(--accent-rgb) / .12);

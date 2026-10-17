@@ -59,5 +59,5 @@ export const brandNames: Record<Brand, { word?: string; label: string }> = {
   consulting: { word: 'consulting', label: 'Prometeo Consulting' },
   academy: { word: 'academy', label: 'Prometeo Academy' },
   talks: { word: 'talks', label: 'Prometeo Talks' },
-  precio: { label: 'Precio Justo by prometeo' },
+  precio: { label: 'Precios Claros by prometeo' },
 };

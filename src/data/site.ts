@@ -24,8 +24,8 @@ export const site = {
   // URL del Apps Script que guarda cada contacto en Google Sheets (ver tools/leads/README.md).
   // Vacío = los formularios solo abren WhatsApp con el mensaje listo.
   formEndpoint: '',
-  // Plataforma pública de Precio Justo
-  precioJustoUrl: 'https://datacrazyy.github.io/price-intelligence-backend/',
+  // Plataforma pública de Precios Claros
+  preciosClarosUrl: 'https://datacrazyy.github.io/price-intelligence-backend/',
   // Archivo de la propuesta comercial dentro de /public
   // Tiempo de respuesta que prometemos en el formulario de contacto
   responseTime: 'durante el día',
@@ -49,7 +49,7 @@ export const stats = [
   { count: 2, prefix: '', label: 'Universidades aliadas', academy: true },
 ];
 
-// Líneas de Prometeo (Precio Justo va aparte en el menú, como proyecto)
+// Líneas de Prometeo (Precios Claros va aparte en el menú, como proyecto)
 export const nav = [
   { key: 'consulting', href: 'consulting/', label: 'Consulting' },
   { key: 'academy', href: 'academy/', label: 'Academy' },

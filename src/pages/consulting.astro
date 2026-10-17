@@ -58,7 +58,7 @@ const steps = [
     <div class="container">
       <SectionHead id="sol" center eyebrow="¿Qué hacemos?" icon="layers" title="Nuestras soluciones"
         lead="Cubrimos todo el ciclo de inteligencia de negocio: de la integración de datos a la visualización ejecutiva y el soporte." />
-      <div class="grid grid-3">
+      <div class="grid grid-3 m-swipe">
         {services.map((s) => (
           <article class="card reveal" data-tilt>
             <div class="icon-chip"><Icon name={s.icon} /></div>
@@ -140,5 +140,10 @@ const steps = [
   @media (max-width: 1000px) {
     .steps { grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 32px; }
     .steps::before { display: none; }
+  }
+  @media (max-width: 640px) {
+    .steps { grid-template-columns: 1fr 1fr; gap: 22px 12px; }
+    .steps h3 { font-size: 15px; margin-bottom: 4px; }
+    .steps p { font-size: 13px; line-height: 1.45; }
   }
 </style>

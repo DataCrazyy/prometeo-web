@@ -9,7 +9,7 @@ PAGES = [  # tema de la página, carpeta del logo, color del brillo, frase
   ('consulting', 'consulting', '#7C4DFF', 'Business Intelligence y Power BI para tu empresa.'),
   ('academy', 'academy', '#3B5BDB', 'Cursos de Power BI en vivo y virtuales.'),
   ('talks', 'talks', '#E8590C', 'Conferencias y videos sobre datos e IA · Próximamente'),
-  ('precio', 'precio-justo', '#12B886', 'Compara precios de supermercados y farmacias antes de comprar.'),
+  ('precio', 'precios-claros', '#12B886', 'Compara precios de supermercados y farmacias antes de comprar.'),
 ]
 FONT = os.path.join(ROOT, 'node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2')
 for theme, folder, _, _ in PAGES:  # favicons

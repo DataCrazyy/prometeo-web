@@ -127,18 +127,18 @@ const lines = [
 
   <Clients />
 
-  <!-- PROYECTO: PRECIO JUSTO BY PROMETEO -->
+  <!-- PROYECTO: PRECIOS CLAROS BY PROMETEO -->
   <section class="project" aria-labelledby="pj-title">
     <div class="container">
       <p class="proj-k reveal">Proyectos Prometeo</p>
       <div class="pj-card">
         <div class="pj-copy reveal">
-          <p class="pj-badge"><Mark brand="precio" size={20} />Precio Justo <span>by prometeo</span></p>
+          <p class="pj-badge"><Mark brand="precio" size={20} />Precios Claros <span>by prometeo</span></p>
           <h2 id="pj-title">Además de asesorar, construimos productos.</h2>
-          <p>Precio Justo compara automáticamente los precios de Fidalga, Hipermaxi, Amarket, Farmacorp y Farmacias Chávez, producto por producto.</p>
+          <p>Precios Claros compara automáticamente los precios de Fidalga, Hipermaxi, Amarket, Farmacorp y Farmacias Chávez, producto por producto.</p>
           <div class="btn-row">
-            <a class="btn pj-btn" href={site.precioJustoUrl} target="_blank" rel="noopener"><Icon name="search" />Buscar precios</a>
-            <a class="btn btn-ghost" href={url('precio-justo/')}>Conocer el proyecto<Icon name="arrow-right" /></a>
+            <a class="btn pj-btn" href={site.preciosClarosUrl} target="_blank" rel="noopener"><Icon name="search" />Buscar precios</a>
+            <a class="btn btn-ghost" href={url('precios-claros/')}>Conocer el proyecto<Icon name="arrow-right" /></a>
           </div>
         </div>
         <div class="pj-mock" data-parallax="6"><PriceTrackerMock compact /></div>
@@ -228,6 +228,16 @@ const lines = [
   .stats { background: linear-gradient(90deg, var(--purple-dark), var(--purple)); color: #fff; padding: 52px 0; }
   .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 24px; margin: 0; text-align: center; }
   .stats-grid dd { margin: 0; font-family: var(--font-display); font-size: 48px; font-weight: 800; letter-spacing: -1.5px; font-variant-numeric: tabular-nums; }
+  @media (max-width: 640px) {
+    .stats { padding: 40px 0; }
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 22px 12px; }
+    .stats-grid > div:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    .stats-grid dd { font-size: 34px; }
+    .stats-grid dt { font-size: 13px; }
+    .pj-card { padding: 28px 20px; gap: 28px; border-radius: 28px; grid-template-columns: minmax(0, 1fr); }
+    .pj-card > * { min-width: 0; }
+    .pj-copy p:not(.pj-badge) { font-size: 16px; margin: 12px 0 22px; }
+  }
   .stats-grid dt { font-size: 14px; color: rgba(255,255,255,.85); }
 
   /* PROYECTO */

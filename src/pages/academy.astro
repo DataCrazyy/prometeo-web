@@ -45,7 +45,7 @@ const faqSchema = {
     <div class="container">
       <SectionHead id="cur" center eyebrow="Cursos" icon="book" title="Elige tu nivel"
         lead={`Cada curso tiene ${format.sessions} sesiones. Toca "Quiero este curso" para ver el temario completo y los precios.`} />
-      <div class="grid grid-3">
+      <div class="grid grid-3 m-swipe">
         {courses.map((c, i) => (
           <article class:list={['course card reveal', { featured: i === 0 }]} data-tilt>
             {i === 0 && <span class="ribbon">Empieza aquí</span>}
@@ -165,7 +165,7 @@ const faqSchema = {
   <section class="section section-alt" aria-labelledby="fmt">
     <div class="container">
       <SectionHead id="fmt" center eyebrow="Formatos" icon="layers" title="Para personas, empresas y universidades" />
-      <div class="grid grid-3">
+      <div class="grid grid-3 m-swipe">
         {formats.map((f) => (
           <article class="card reveal">
             <div class="icon-chip"><Icon name={f.icon} /></div>

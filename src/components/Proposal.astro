@@ -154,6 +154,12 @@ const weeks = [1, 2, 3, 4, 5, 6];
   .doc-items :global(svg) { color: var(--purple); flex: none; width: 20px; height: 20px; margin-top: 2px; }
   .doc-items strong { display: block; font-size: 14px; }
   .doc-items span { font-size: 13px; color: var(--gray-mid); line-height: 1.45; }
+  @media (max-width: 640px) {
+    .doc-items { grid-template-columns: 1fr 1fr; gap: 8px; padding: 16px; }
+    .doc-items li { padding: 12px 10px; gap: 8px; }
+    .doc-items span { display: none; }
+    .doc-items strong { font-size: 13px; }
+  }
 
   .gantt-title { text-align: center; margin-bottom: 22px; }
   .muted { color: rgba(255,255,255,.72); font-size: 15px; }

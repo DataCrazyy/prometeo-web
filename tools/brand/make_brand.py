@@ -79,7 +79,7 @@ def icon(brand, mode='color'):
         hs = [10, 20, 28, 17, 24, 11]
         out += [rr(13.5 + i * 6.6, 27.5 - h / 2, 4.4, h, col(cols[i]), op(i % 3)) for i, h in enumerate(hs)]
         out.append(f'<circle cx="52" cy="14" r="3" fill="{spark}"/>')
-    elif brand == 'precio-justo':
+    elif brand == 'precios-claros':
         tag = 'M4 32 L19 13 H55 a5 5 0 0 1 5 5 V46 a5 5 0 0 1 -5 5 H19 Z M14.5 32 m-4 0 a4 4 0 1 0 8 0 a4 4 0 1 0 -8 0 Z'
         bars = [(25, 23, 3, 18), (30, 23, 1.6, 18), (33.6, 23, 4, 18), (39.6, 23, 2, 18), (43.6, 23, 3.4, 18), (49, 23, 1.8, 18)]
         g = [f'<path d="{tag}" fill="{col("#12B886")}" fill-rule="evenodd"/>']
@@ -94,16 +94,16 @@ BRANDS = {
     'consulting':   dict(word='consulting', acc_l='#7C4DFF', acc_d='#B39DFF'),
     'academy':      dict(word='academy',    acc_l='#3B5BDB', acc_d='#91A7FF'),
     'talks':        dict(word='talks',      acc_l='#E8590C', acc_d='#FFA94D'),
-    'precio-justo': dict(word=None,         acc_l='#0B8A65', acc_d='#63E6BE'),
+    'precios-claros': dict(word=None,         acc_l='#0B8A65', acc_d='#63E6BE'),
 }
-BG = {'prometeo': '#7C4DFF', 'consulting': '#5E35B1', 'academy': '#2F4AC0', 'talks': '#E8590C', 'precio-justo': '#0B8A65'}
+BG = {'prometeo': '#7C4DFF', 'consulting': '#5E35B1', 'academy': '#2F4AC0', 'talks': '#E8590C', 'precios-claros': '#0B8A65'}
 
 def wordmark(brand, dark, size):
     """Devuelve (lista de paths, ancho, alto de referencia) con la línea base en y=0."""
     b = BRANDS[brand]; ink = '#FFFFFF' if dark else INK
-    if brand == 'precio-justo':
+    if brand == 'precios-claros':
         acc = b['acc_d'] if dark else b['acc_l']
-        d1, w1 = text_path('Precio Justo', 800, size, track=-size * .02)
+        d1, w1 = text_path('Precios Claros', 800, size, track=-size * .02)
         s2 = size * .44; d2, w2 = text_path('by prometeo', 600, s2, base=s2 * 1.45)
         return [(d1, ink), (d2, acc)], max(w1, w2), 'pj'
     d1, w1 = text_path('prometeo', 700, size, track=-size * .02)
@@ -123,7 +123,7 @@ def paths(parts, tx, ty): return f'<g transform="translate({tx:.2f} {ty:.2f})">'
 def place_icon(brand, mode, x, y, size): return f'<g transform="translate({x:.2f} {y:.2f}) scale({size / 64:.4f})">{icon(brand, mode)}</g>'
 
 def horizontal(brand, dark):
-    H = 200; size = 104 if brand != 'precio-justo' else 92
+    H = 200; size = 104 if brand != 'precios-claros' else 92
     parts, tw, kind = wordmark(brand, dark, size)
     gap = H * .2; pad = 8
     if kind == 'one': base = H / 2 + xheight(700, size) / 2
@@ -132,13 +132,13 @@ def horizontal(brand, dark):
     return svg(W, H + 2 * pad, place_icon(brand, 'white' if False else 'color', pad, pad, H) + paths(parts, pad + H + gap, pad + base))
 
 def vertical(brand, dark):
-    I = 300; size = (96 if brand == 'prometeo' else 70) if brand != 'precio-justo' else 80
+    I = 300; size = (96 if brand == 'prometeo' else 70) if brand != 'precios-claros' else 80
     parts, tw, kind = wordmark(brand, dark, size)
     W = max(I, tw) + 40; top = 20
     base = top + I + 46 + (capheight(800, size) if kind == 'pj' else xheight(700, size))
     Hh = base + (size * .44 * 1.45 + 20 if kind == 'pj' else size * .32) + 20
     if kind == 'pj':  # centrar cada línea
-        d1, w1 = text_path('Precio Justo', 800, size, track=-size * .02); s2 = size * .44
+        d1, w1 = text_path('Precios Claros', 800, size, track=-size * .02); s2 = size * .44
         d2, w2 = text_path('by prometeo', 600, s2, x0=(w1 - text_w('by prometeo', 600, s2)) / 2, base=s2 * 1.45)
         parts = [(d1, parts[0][1]), (d2, parts[1][1])]; tw = w1
     return svg(W, Hh, place_icon(brand, 'color', (W - I) / 2, top, I) + paths(parts, (W - tw) / 2, base))
@@ -177,7 +177,7 @@ for b in BRANDS:
         ('vertical-fondo-claro', vertical(b, False), 3), ('vertical-fondo-oscuro', vertical(b, True), 3)]:
         p = os.path.join(d, name + '.svg'); write(p, content); jobs.append((p, p[:-4] + '.png', sc))
     p = os.path.join(OUT, 'instagram', f'perfil-{b}.svg'); write(p, avatar(b)); jobs.append((p, p[:-4] + '.png', 1))
-for b, label in [('prometeo', 'Nosotros'), ('consulting', 'Consulting'), ('academy', 'Academy'), ('talks', 'Talks'), ('precio-justo', 'Precio Justo')]:
+for b, label in [('prometeo', 'Nosotros'), ('consulting', 'Consulting'), ('academy', 'Academy'), ('talks', 'Talks'), ('precios-claros', 'Precios Claros')]:
     p = os.path.join(OUT, 'instagram', f'destacada-{b}.svg'); write(p, highlight(b, label)); jobs.append((p, p[:-4] + '.png', 1))
 
 from playwright.sync_api import sync_playwright

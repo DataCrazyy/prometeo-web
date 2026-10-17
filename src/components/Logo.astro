@@ -1,6 +1,6 @@
 ---
 // Logo horizontal: ícono de la marca + nombre. Las líneas escriben "prometeo" + su nombre en su color;
-// Precio Justo es un proyecto aparte y va como "Precio Justo" con "by prometeo" debajo.
+// Precios Claros es un proyecto aparte y va como "Precios Claros" con "by prometeo" debajo.
 import Mark from './Mark.astro';
 import type { Brand } from '../lib/brandIcons';
 interface Props { brand?: Brand; light?: boolean; size?: number }
@@ -10,7 +10,7 @@ const sub = { consulting: 'consulting', academy: 'academy', talks: 'talks' }[bra
 <span class:list={['logo', `b-${brand}`, { light }]}>
   <Mark brand={brand} size={size} class="mark" />
   {brand === 'precio'
-    ? <span class="word pj">Precio Justo<span class="by">by prometeo</span></span>
+    ? <span class="word pj">Precios Claros<span class="by">by prometeo</span></span>
     : <span class="word">prometeo{sub && <span class="sub"> {sub}</span>}</span>}
 </span>
 

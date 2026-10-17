@@ -7,9 +7,9 @@ Sitio oficial de **Prometeo**, la marca que agrupa:
 | Prometeo Consulting | `/consulting` | Asesorías de Business Intelligence y Power BI, con modalidades, propuesta comercial y cronograma |
 | Prometeo Academy | `/academy` | Cursos y capacitaciones (Student, Enterprise, abiertos) |
 | Prometeo Talks | `/talks` | Conferencias, eventos y videos (próximamente, con lista de espera) |
-| **Precio Justo by Prometeo** | `/precio-justo` | Proyecto aparte: comparador y monitoreo de precios con web scraping |
+| **Precios Claros by Prometeo** | `/precios-claros` | Proyecto aparte: comparador y monitoreo de precios con web scraping |
 
-Cada página tiene su color: Prometeo y Consulting en violeta, Academy en azul, Talks en naranja y Precio Justo en verde (`data-theme` en `src/styles/global.css`).
+Cada página tiene su color: Prometeo y Consulting en violeta, Academy en azul, Talks en naranja y Precios Claros en verde (`data-theme` en `src/styles/global.css`).
 
 ## Stack
 
@@ -47,7 +47,7 @@ python tools/propuesta/make_proposal.py public/Propuesta_Comercial_Prometeo_Cons
 
 ## Marca
 
-Los logos de las cinco marcas (Prometeo, Consulting, Academy, Talks y Precio Justo) están en `public/brand/<marca>/` en SVG y PNG, con versiones para fondo claro y oscuro, y las piezas de Instagram en `public/brand/instagram/`. Cada página usa el logo, el favicon y la imagen para compartir de su línea. Para regenerarlos:
+Los logos de las cinco marcas (Prometeo, Consulting, Academy, Talks y Precios Claros) están en `public/brand/<marca>/` en SVG y PNG, con versiones para fondo claro y oscuro, y las piezas de Instagram en `public/brand/instagram/`. Cada página usa el logo, el favicon y la imagen para compartir de su línea. Para regenerarlos:
 
 ```bash
 pip install fonttools brotli playwright

@@ -30,7 +30,7 @@ const road = [
   { year: '2024', brand: 'academy', t: 'Primera capacitación in-company', d: 'Power BI para el equipo de Nexocorp.' },
   { year: '2025', brand: 'academy', t: 'Capacitación en Industrias Venado', d: 'Power BI aplicado a su operación comercial.' },
   { year: '2026', brand: 'academy', t: 'Docencia en dos universidades', d: 'Los dos somos docentes en la UAGRM, y Diego enseña Python en la Universidad Católica Boliviana.' },
-  { year: 'Hoy', brand: 'prometeo', t: 'Nace Prometeo', d: 'Consulting, Academy y Talks bajo una misma marca, y Precio Justo como proyecto propio.', now: true },
+  { year: 'Hoy', brand: 'prometeo', t: 'Nace Prometeo', d: 'Consulting, Academy y Talks bajo una misma marca, y Precios Claros como proyecto propio.', now: true },
 ] as const;
 
 const values = [
@@ -136,7 +136,7 @@ const values = [
   <section class="section" aria-labelledby="val">
     <div class="container">
       <SectionHead id="val" center eyebrow="Cómo trabajamos" icon="handshake" title="Lo que nos guía" />
-      <div class="grid grid-4">
+      <div class="grid grid-4 m-swipe">
         {values.map((v) => (
           <article class="card reveal" data-tilt>
             <div class="icon-chip"><Icon name={v.icon} /></div>
@@ -152,7 +152,7 @@ const values = [
         <a href={url('consulting/')} class="nl c"><Mark brand="consulting" size={20} />Prometeo Consulting</a>
         <a href={url('academy/')} class="nl a"><Mark brand="academy" size={20} />Prometeo Academy</a>
         <a href={url('talks/')} class="nl t"><Mark brand="talks" size={20} />Prometeo Talks</a>
-        <a href={url('precio-justo/')} class="nl p"><Mark brand="precio" size={20} />Precio Justo by prometeo</a>
+        <a href={url('precios-claros/')} class="nl p"><Mark brand="precio" size={20} />Precios Claros by prometeo</a>
       </div>
     </div>
   </section>
@@ -209,6 +209,18 @@ const values = [
   .exp strong { color: var(--charcoal); }
   .li { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-weight: 600; font-size: 14px; padding: 6px 0; }
   @media (max-width: 520px) { .person { flex-direction: column; } }
+  @media (max-width: 640px) {
+    dl.n-stats { grid-template-columns: 1fr 1fr; padding: 26px 16px; gap: 18px 10px; margin-top: 40px; }
+    dl.n-stats > div:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    .n-stats dd { font-size: 30px; }
+    .n-stats dt { font-size: 13px; }
+    .story .chapter { padding: 30px 0; }
+    .ch-n { font-size: 44px; -webkit-text-stroke-width: 1.5px; }
+    .ch-body p { font-size: 16px; }
+    .person { padding: 22px; gap: 16px; }
+    .photo { width: 84px; height: 84px; border-radius: 22px; }
+    .ini { font-size: 30px; }
+  }
   .n-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin: 64px 0 0; text-align: center; padding: 36px; border-radius: var(--radius-lg); background: var(--hero-grad); color: #fff; }
   .n-stats dd { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 40px; letter-spacing: -1px; }
   .n-stats dt { font-size: 14px; color: rgba(255,255,255,.8); }
