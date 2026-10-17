@@ -1,0 +1,29 @@
+---
+import Icon from './Icon.astro';
+import { bookingLink, waLink, site } from '../data/site';
+interface Props { title?: string; lead?: string }
+const {
+  title = '¿Listo para que tus datos trabajen para ti?',
+  lead = 'Cuéntanos qué decisión necesitas tomar y te proponemos el camino: un proyecto, un curso o datos de precios.',
+} = Astro.props;
+---
+<section class="cta" aria-labelledby="cta-title">
+  <div class="container inner reveal">
+    <h2 id="cta-title">{title}</h2>
+    <p>{lead}</p>
+    <div class="btn-row center">
+      <a class="btn btn-white" href={bookingLink()} target="_blank" rel="noopener"><Icon name="calendar" />Agendar reunión</a>
+      <a class="btn btn-ghost" href={waLink()} target="_blank" rel="noopener"><Icon name="message" />Escribir por WhatsApp</a>
+    </div>
+    <p class="small"><a href={`mailto:${site.email}`}>{site.email}</a></p>
+  </div>
+</section>
+
+<style>
+  .cta { background: linear-gradient(135deg, #1A0E3B 0%, var(--purple) 50%, #1A0E3B 100%); padding: 100px 0; color: #fff; text-align: center; position: relative; overflow: hidden; }
+  .inner { position: relative; }
+  h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 800; letter-spacing: -1.5px; max-width: 760px; margin: 0 auto 18px; }
+  p { font-size: 18px; color: rgba(255,255,255,.8); max-width: 600px; margin: 0 auto 36px; }
+  .small { margin: 24px auto 0; font-size: 15px; }
+  .small a { color: #fff; }
+</style>

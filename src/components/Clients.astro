@@ -1,0 +1,31 @@
+---
+import { Image } from 'astro:assets';
+import venado from '../assets/clients/grupo-venado.png';
+import nexocorp from '../assets/clients/nexocorp.png';
+import cliente3 from '../assets/clients/cliente-3.png';
+import SectionHead from './SectionHead.astro';
+
+// Agrega aquí más logos (PNG o SVG en src/assets/clients/)
+const logos = [
+  { src: venado, alt: 'Grupo Venado' },
+  { src: nexocorp, alt: 'Nexocorp' },
+  { src: cliente3, alt: '[Nombre del cliente 3]' },
+];
+---
+<section class="section clients" aria-labelledby="clients-title">
+  <div class="container">
+    <SectionHead id="clients-title" center eyebrow="Confianza" icon="handshake" title="Empresas que han confiado en nosotros" />
+    <ul class="row reveal">
+      {logos.map((l) => (
+        <li><Image src={l.src} alt={l.alt} height={84} densities={[1, 2]} /></li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .clients { padding: 80px 0; }
+  .row { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 56px; }
+  .row :global(img) { height: 84px; width: auto; filter: grayscale(1); opacity: .75; transition: filter var(--trans), opacity var(--trans), transform var(--trans); }
+  .row li:hover :global(img) { filter: none; opacity: 1; transform: scale(1.05); }
+</style>

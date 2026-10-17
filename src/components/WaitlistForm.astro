@@ -1,0 +1,26 @@
+---
+import { site } from '../data/site';
+const useEndpoint = Boolean(site.formEndpoint);
+const action = useEndpoint ? site.formEndpoint : `mailto:${site.email}?subject=${encodeURIComponent('Lista de espera Prometeo Talks')}`;
+---
+<form class="wl" action={action} method="post" enctype={useEndpoint ? undefined : 'text/plain'}>
+  <p class="wl-title">Entérate del primer evento</p>
+  <label for="wl-name">Nombre</label>
+  <input id="wl-name" name="nombre" type="text" autocomplete="name" required />
+  <label for="wl-email">Correo electrónico</label>
+  <input id="wl-email" name="email" type="email" autocomplete="email" placeholder="tu@empresa.com" required />
+  <input type="hidden" name="origen" value="Prometeo Talks" />
+  <button class="btn btn-primary" type="submit">Avísame del primer evento</button>
+  <p class="wl-hint">Solo te escribimos cuando haya fecha confirmada.</p>
+</form>
+
+<style>
+  .wl { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); border-radius: var(--radius-lg); padding: 30px; display: flex; flex-direction: column; gap: 8px; }
+  .wl-title { font-family: var(--font-display); font-weight: 700; font-size: 20px; color: #fff; margin-bottom: 8px; }
+  label { font-size: 14px; color: rgba(255,255,255,.8); margin-top: 6px; }
+  input { font: inherit; min-height: 48px; padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,.25); background: rgba(10,6,28,.5); color: #fff; }
+  input::placeholder { color: rgba(255,255,255,.45); }
+  input:focus-visible { outline: 3px solid var(--purple-soft); outline-offset: 1px; }
+  .btn { margin-top: 14px; width: 100%; }
+  .wl-hint { font-size: 13px; color: rgba(255,255,255,.6); text-align: center; margin-top: 4px; }
+</style>

@@ -1,0 +1,73 @@
+---
+import Icon from './Icon.astro';
+import { waLink, bookingLink } from '../data/site';
+
+const plans = [
+  {
+    label: 'Bajo demanda', name: 'Desarrollo por horas', icon: 'clock',
+    tagline: 'Para quien ya tiene una solución y necesita mejoras o nuevos desarrollos.',
+    pre: '', price: 'Bs 200', period: 'por hora de trabajo',
+    features: ['Nuevos dashboards e indicadores', 'Cambios solicitados', 'Automatizaciones', 'Optimización DAX', 'Integración de nuevas fuentes'],
+    cta: 'Cotizar horas', href: waLink('Hola, quiero cotizar horas de desarrollo en Power BI.'), featured: false,
+  },
+  {
+    label: 'Proyecto completo', name: 'Implementación de BI', icon: 'rocket',
+    tagline: 'Tu solución de Business Intelligence desde cero, en unas 6 semanas.',
+    pre: 'Desde', price: 'Bs 4.000', period: 'por proyecto · según alcance',
+    features: ['Levantamiento de requerimientos', 'Diseño funcional y maquetación', 'Modelado de datos y DAX', 'Conexión de fuentes', 'Publicación y capacitación', 'Documentación completa'],
+    support: 'Incluye 2 meses de soporte obligatorio (Bs 500/mes) para asegurar la adopción.',
+    cta: 'Solicitar propuesta', href: bookingLink(), featured: true,
+  },
+  {
+    label: 'Servicio adicional', name: 'Soporte mensual', icon: 'headset',
+    tagline: 'Opcional desde el tercer mes, para que tu BI siga evolucionando.',
+    pre: '', price: 'Bs 500', period: 'por mes',
+    features: ['Soporte remoto', 'Ajustes menores', 'Revisión mensual', 'Optimizaciones', 'Atención prioritaria'],
+    cta: 'Contratar soporte', href: waLink('Hola, quiero contratar el soporte mensual de Prometeo.'), featured: false,
+  },
+] as const;
+---
+<div class="plans">
+  {plans.map((p) => (
+    <article class:list={['plan reveal', { featured: p.featured }]}>
+      {p.featured && <span class="badge">Recomendado</span>}
+      <div class="plan-icon"><Icon name={p.icon} /></div>
+      <p class="label">{p.label}</p>
+      <h3>{p.name}</h3>
+      <p class="tagline">{p.tagline}</p>
+      <p class="price">{p.pre && <span class="pre">{p.pre} </span>}<span class="amount">{p.price}</span><span class="period">{p.period}</span></p>
+      <ul>{p.features.map((f) => <li><Icon name="check" size={16} />{f}</li>)}</ul>
+      {'support' in p && <p class="support"><Icon name="shield" size={16} />{p.support}</p>}
+      <a class:list={['btn', p.featured ? 'btn-primary' : 'btn-outline']} href={p.href} target="_blank" rel="noopener">{p.cta}</a>
+    </article>
+  ))}
+</div>
+
+<style>
+  .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 24px; align-items: center; }
+  .plan { background: #fff; border: 1.5px solid rgba(124,77,255,.14); border-radius: var(--radius-lg); padding: 36px 30px; position: relative; display: flex; flex-direction: column; transition: box-shadow var(--trans), transform var(--trans); }
+  .plan:hover { box-shadow: var(--shadow-hover); transform: translateY(-5px); }
+  .plan.featured { background: linear-gradient(145deg, #2D1566, #1A0E3B); border-color: var(--purple); color: #fff; padding: 46px 32px; box-shadow: var(--shadow-lg); }
+  .badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, var(--purple), var(--purple-soft)); color: #fff; font-size: 12px; font-weight: 700; padding: 5px 18px; border-radius: 50px; white-space: nowrap; }
+  .plan-icon { width: 54px; height: 54px; border-radius: 14px; background: var(--purple-light); color: var(--purple); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+  .featured .plan-icon { background: rgba(124,77,255,.28); color: var(--purple-soft); }
+  .label { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--purple-dark); }
+  .featured .label { color: var(--purple-soft); }
+  h3 { font-size: 22px; font-weight: 800; margin: 6px 0; }
+  .tagline { font-size: 14px; color: var(--gray-mid); margin-bottom: 22px; }
+  .featured .tagline { color: rgba(255,255,255,.7); }
+  .price { margin-bottom: 20px; }
+  .pre { font-size: 15px; color: var(--gray-mid); }
+  .amount { font-family: var(--font-display); font-size: 44px; font-weight: 800; letter-spacing: -2px; line-height: 1; }
+  .period { display: block; font-size: 13px; color: var(--gray-mid); margin-top: 4px; }
+  .featured .pre, .featured .period { color: rgba(255,255,255,.65); }
+  ul { list-style: none; border-top: 1px solid rgba(124,77,255,.12); padding-top: 14px; margin-bottom: 24px; }
+  .featured ul { border-color: rgba(255,255,255,.12); }
+  li { display: flex; align-items: center; gap: 10px; font-size: 14px; padding: 6px 0; color: var(--gray-dark); }
+  .featured li { color: rgba(255,255,255,.88); font-size: 15px; }
+  li :global(svg) { color: var(--purple); flex: none; }
+  .featured li :global(svg) { color: var(--purple-soft); }
+  .support { display: flex; gap: 10px; background: rgba(124,77,255,.2); border: 1px solid rgba(124,77,255,.4); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: rgba(255,255,255,.88); margin-bottom: 24px; }
+  .support :global(svg) { color: var(--purple-soft); flex: none; margin-top: 2px; }
+  .btn { margin-top: auto; width: 100%; }
+</style>

@@ -1,0 +1,12 @@
+---
+import Icon from './Icon.astro';
+interface Props { eyebrow?: string; icon?: Parameters<typeof Icon>[0]['name']; title: string; lead?: string; center?: boolean; id?: string }
+const { eyebrow, icon, title, lead, center = false, id } = Astro.props;
+---
+<div class:list={['section-head reveal', { center }]}>
+  {eyebrow && <p class="eyebrow">{icon && <Icon name={icon} />}{eyebrow}</p>}
+  <h2 class="section-title" id={id}>{title}</h2>
+  <div class="divider-line"></div>
+  {lead && <p class="section-lead">{lead}</p>}
+  <slot />
+</div>

@@ -1,0 +1,117 @@
+---
+import Icon from './Icon.astro';
+import SectionHead from './SectionHead.astro';
+import { site, bookingLink } from '../data/site';
+import { url } from '../lib/url';
+
+const contents = [
+  { icon: 'layers', t: 'Alcance', d: 'Servicios y entregables del proyecto.' },
+  { icon: 'workflow', t: 'Metodología', d: 'Las 6 etapas de implementación.' },
+  { icon: 'calendar', t: 'Cronograma', d: 'Plan de trabajo semana a semana.' },
+  { icon: 'check-circle', t: 'Entregables', d: 'Todo lo que recibes al cierre.' },
+  { icon: 'coins', t: 'Inversión', d: 'Costos por modalidad de contratación.' },
+  { icon: 'headset', t: 'Soporte', d: 'Acompañamiento después de la entrega.' },
+] as const;
+
+// Semanas activas por actividad (1 a 6)
+const gantt = [
+  { icon: 'search', t: 'Descubrimiento', w: [1, 2], c: 'b1' },
+  { icon: 'file', t: 'Documentación', w: [2, 3], c: 'b2' },
+  { icon: 'pen', t: 'Diseño funcional', w: [2, 3], c: 'b3' },
+  { icon: 'code', t: 'Desarrollo', w: [3, 4, 5], c: 'b4' },
+  { icon: 'check-circle', t: 'Validación', w: [4, 5], c: 'b5' },
+  { icon: 'rocket', t: 'Implementación', w: [5, 6], c: 'b6' },
+  { icon: 'graduation', t: 'Capacitación', w: [6], c: 'b7' },
+] as const;
+const weeks = [1, 2, 3, 4, 5, 6];
+---
+<section id="propuesta" class="section section-dark" aria-labelledby="prop-title">
+  <div class="container">
+    <SectionHead
+      id="prop-title" center eyebrow="Propuesta comercial" icon="file"
+      title="Descarga nuestra propuesta comercial"
+      lead="Alcance, metodología, cronograma, entregables e inversión de un proyecto de Business Intelligence, en un solo documento."
+    />
+
+    <div class="doc reveal">
+      <div class="doc-head">
+        <span class="doc-icon" aria-hidden="true">P</span>
+        <div>
+          <strong>Propuesta comercial · Prometeo Consulting</strong>
+          <span>Business Intelligence · {new Date().getFullYear()}</span>
+        </div>
+      </div>
+      <ul class="doc-items">
+        {contents.map((c) => (
+          <li><Icon name={c.icon} /><div><strong>{c.t}</strong><span>{c.d}</span></div></li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="gantt-title reveal">
+      <p class="eyebrow"><Icon name="calendar" />Cronograma estimado</p>
+      <p class="muted">Un proyecto completo toma en promedio <strong>6 semanas</strong>.</p>
+    </div>
+
+    <div class="gantt-scroll reveal" role="region" aria-label="Cronograma estimado de 6 semanas" tabindex="0">
+      <table class="gantt">
+        <caption class="sr-only">Actividades del proyecto y semanas en que se realizan</caption>
+        <thead>
+          <tr><th scope="col">Actividad</th>{weeks.map((w) => <th scope="col">S{w}</th>)}</tr>
+        </thead>
+        <tbody>
+          {gantt.map((row) => (
+            <tr>
+              <th scope="row"><Icon name={row.icon} size={15} />{row.t}</th>
+              {weeks.map((w) => (
+                <td>{(row.w as readonly number[]).includes(w) ? <span class={`bar ${row.c}`}><span class="sr-only">Semana {w}</span></span> : null}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="btn-row center reveal">
+      <a class="btn btn-white" href={url(site.proposalFile)} download><Icon name="download" />Descargar propuesta (PDF)</a>
+      <a class="btn btn-ghost" href={bookingLink()} target="_blank" rel="noopener"><Icon name="calendar" />Agendar una reunión</a>
+    </div>
+    <p class="note">Los precios finales dependen del alcance de cada proyecto.</p>
+  </div>
+</section>
+
+<style>
+  .doc { background: #fff; color: var(--charcoal); border-radius: var(--radius-lg); overflow: hidden; max-width: 680px; margin: 0 auto 64px; box-shadow: 0 24px 72px rgba(0,0,0,.35); }
+  .doc-head { background: linear-gradient(135deg, var(--purple), var(--purple-deep)); color: #fff; padding: 20px 28px; display: flex; gap: 14px; align-items: center; }
+  .doc-head div strong { display: block; font-size: 15px; }
+  .doc-head div span { font-size: 13px; color: rgba(255,255,255,.75); }
+  .doc-icon { width: 44px; height: 44px; border-radius: 10px; background: #fff; color: var(--purple-dark); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; font-size: 20px; flex: none; }
+  .doc-items { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 12px; padding: 24px; }
+  .doc-items li { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 12px; background: var(--gray-light); transition: background var(--trans); }
+  .doc-items li:hover { background: var(--purple-light); }
+  .doc-items :global(svg) { color: var(--purple); flex: none; width: 20px; height: 20px; margin-top: 2px; }
+  .doc-items strong { display: block; font-size: 14px; }
+  .doc-items span { font-size: 13px; color: var(--gray-mid); line-height: 1.45; }
+
+  .gantt-title { text-align: center; margin-bottom: 22px; }
+  .muted { color: rgba(255,255,255,.72); font-size: 15px; }
+  .muted strong { color: #fff; }
+  .gantt-scroll { overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); margin-bottom: 44px; }
+  .gantt { width: 100%; min-width: 620px; border-collapse: collapse; }
+  .gantt thead th { background: rgba(124,77,255,.28); padding: 13px 8px; font-size: 12px; font-weight: 700; letter-spacing: .5px; color: rgba(255,255,255,.9); text-align: center; }
+  .gantt thead th:first-child { text-align: left; padding-left: 20px; width: 200px; }
+  .gantt tbody tr { border-top: 1px solid rgba(255,255,255,.07); transition: background var(--trans); }
+  .gantt tbody tr:hover { background: rgba(255,255,255,.04); }
+  .gantt tbody th { text-align: left; padding: 12px 20px; font-size: 14px; font-weight: 600; color: rgba(255,255,255,.88); white-space: nowrap; }
+  .gantt tbody th :global(svg) { color: var(--purple-soft); vertical-align: -2px; margin-right: 8px; }
+  .gantt td { padding: 10px 4px; }
+  .bar { display: block; height: 20px; border-radius: 6px; margin: 0 auto; width: 88%; }
+  .b1 { background: linear-gradient(90deg,#7C4DFF,#9B6EFF); }
+  .b2 { background: linear-gradient(90deg,#5E35B1,#7C4DFF); }
+  .b3 { background: linear-gradient(90deg,#3D1E9E,#5E35B1); }
+  .b4 { background: linear-gradient(90deg,#B39DFF,#7C4DFF); }
+  .b5 { background: linear-gradient(90deg,#7C4DFF,#5E35B1); }
+  .b6 { background: linear-gradient(90deg,#9B6EFF,#B39DFF); }
+  .b7 { background: linear-gradient(90deg,#EDE7F6,#B39DFF); }
+  .note { text-align: center; margin-top: 18px; font-size: 13px; color: rgba(255,255,255,.6); }
+</style>

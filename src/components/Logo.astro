@@ -1,0 +1,25 @@
+---
+// Logo provisional. Cuando tengas el definitivo, guarda el SVG en src/assets/logo.svg
+// y reemplaza el <span class="mark"> por <img src={logo.src} alt="" />.
+interface Props { sub?: string; light?: boolean }
+const { sub, light = false } = Astro.props;
+---
+<span class:list={['logo', { light }]}>
+  <span class="mark" aria-hidden="true">P</span>
+  <span class="word">Prometeo{sub && <span class="sub"> {sub}</span>}</span>
+</span>
+
+<style>
+  .logo { display: inline-flex; align-items: center; gap: 10px; }
+  .mark {
+    width: 38px; height: 38px; border-radius: 11px; flex: none;
+    background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+    color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 19px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 14px rgba(124, 77, 255, .4);
+  }
+  .word { font-family: var(--font-display); font-weight: 700; font-size: 19px; letter-spacing: -.3px; color: var(--charcoal); }
+  .sub { color: var(--purple); }
+  .light .word { color: #fff; }
+  .light .sub { color: #C3AAFF; }
+</style>

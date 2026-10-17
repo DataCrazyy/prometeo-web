@@ -1,0 +1,64 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { site, waLink } from '../data/site';
+import { url } from '../lib/url';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container">
+    <div class="cols">
+      <div class="about">
+        <Logo light />
+        <p class="about-text">Consultoría, formación, inteligencia de precios y comunidad de datos.</p>
+        <p class="phrase">"Transformamos datos en decisiones inteligentes."</p>
+      </div>
+      <div>
+        <h2 class="title">Ecosistema</h2>
+        <ul class="links">
+          <li><a href={url('consulting/')}>Prometeo Consulting</a></li>
+          <li><a href={url('academy/')}>Prometeo Academy</a></li>
+          <li><a href={url('precio-justo/')}>Precio Justo</a></li>
+          <li><a href={url('talks/')}>Prometeo Talks</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="title">Recursos</h2>
+        <ul class="links">
+          <li><a href={url('consulting/#propuesta')}>Propuesta comercial</a></li>
+          <li><a href={url('consulting/#planes')}>Modalidades y precios</a></li>
+          <li><a href={url('academy/#cursos')}>Cursos</a></li>
+          <li><a href={url('#alianzas')}>Alianzas</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="title">Contacto</h2>
+        <ul class="links contact">
+          <li><a href={`mailto:${site.email}`}><Icon name="mail" size={16} />{site.email}</a></li>
+          <li><a href={waLink()} target="_blank" rel="noopener"><Icon name="message" size={16} />WhatsApp {site.phoneDisplay}</a></li>
+          <li><a href={site.linkedin} target="_blank" rel="noopener"><Icon name="linkedin" size={16} />LinkedIn</a></li>
+          <li><span><Icon name="pin" size={16} />{site.city}</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="bottom">
+      <span>© {year} Prometeo · Todos los derechos reservados</span>
+      <span>Hecho en Santa Cruz, Bolivia</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer { background: var(--charcoal); color: rgba(255,255,255,.7); padding: 68px 0 28px; }
+  .cols { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 40px; }
+  .about-text { font-size: 14px; margin-top: 16px; max-width: 300px; color: rgba(255,255,255,.62); }
+  .phrase { font-size: 13px; font-style: italic; color: rgba(255,255,255,.45); margin-top: 10px; }
+  .title { font-family: var(--font-body); font-size: 12px; font-weight: 700; color: #fff; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px; }
+  .links { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .links a, .links span { display: inline-flex; align-items: center; gap: 8px; padding: 6px 0; color: rgba(255,255,255,.7); font-size: 14px; text-decoration: none; transition: color var(--trans); }
+  .links a:hover { color: var(--purple-soft); }
+  .links :global(svg) { color: var(--purple-soft); flex: none; }
+  .bottom { border-top: 1px solid rgba(255,255,255,.1); margin-top: 48px; padding-top: 22px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; font-size: 13px; color: rgba(255,255,255,.5); }
+  @media (max-width: 860px) { .cols { grid-template-columns: 1fr 1fr; } .about { grid-column: 1 / -1; } }
+  @media (max-width: 520px) { .cols { grid-template-columns: 1fr; } }
+</style>

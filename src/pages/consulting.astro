@@ -1,0 +1,138 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Plans from '../components/Plans.astro';
+import Proposal from '../components/Proposal.astro';
+import Clients from '../components/Clients.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { bookingLink } from '../data/site';
+import precios from '../assets/work/precios-competencia.jpg';
+import ventas1 from '../assets/work/ventas-1.jpg';
+import ventas2 from '../assets/work/ventas-2.jpg';
+import distribucion from '../assets/work/distribucion.jpg';
+
+const services = [
+  { icon: 'chart', t: 'Dashboards ejecutivos', d: 'KPIs estratégicos, tendencias y alertas para la gerencia, en Power BI.' },
+  { icon: 'workflow', t: 'Automatización de reportes', d: 'Conexiones automáticas y actualización programada: adiós al reporte manual.' },
+  { icon: 'database', t: 'Modelado de datos', d: 'Modelos semánticos escalables con DAX optimizado para alto volumen.' },
+  { icon: 'plug', t: 'Integración de sistemas', d: 'ERP, CRM, bases de datos y APIs en un único modelo centralizado.', tags: ['SAP', 'SQL Server', 'Oracle', 'APIs', 'Excel'] },
+  { icon: 'shield', t: 'Gobierno de datos', d: 'Seguridad por rol, gestión de permisos y documentación técnica completa.' },
+  { icon: 'headset', t: 'Soporte continuo', d: 'Mantenimiento, monitoreo y evolución de tu solución después de la entrega.' },
+] as const;
+
+const work = [
+  { img: precios, t: 'Precios frente a la competencia', d: 'Precio ponderado, emparejamiento de productos y desvío por artículo.', area: 'Comercial' },
+  { img: ventas1, t: 'Dashboard de ventas', d: 'Seguimiento de ventas, cumplimiento de metas y análisis por cliente.', area: 'Ventas' },
+  { img: ventas2, t: 'Ventas y rentabilidad', d: 'Toneladas ejecutadas, proyección lineal y utilidad bruta por período.', area: 'Finanzas' },
+  { img: distribucion, t: 'Performance de distribución', d: 'KPIs operativos y mapa de clientes para la dirección.', area: 'Gerencia' },
+];
+
+const steps = [
+  { icon: 'search', t: 'Descubrimiento', d: 'Entrevistas para entender tu negocio, procesos y necesidades de información.' },
+  { icon: 'pen', t: 'Diseño funcional', d: 'Definimos KPIs y validamos contigo el boceto de cada dashboard.' },
+  { icon: 'code', t: 'Desarrollo', d: 'Modelo de datos, medidas DAX y conexión de fuentes en Power BI.' },
+  { icon: 'check-circle', t: 'Validación', d: 'Revisamos juntos que los datos cuadren y todo funcione.' },
+  { icon: 'rocket', t: 'Implementación', d: 'Publicamos en el servicio Power BI, capacitamos y entregamos manuales.' },
+  { icon: 'headset', t: 'Soporte', d: 'Acompañamos, ajustamos y hacemos evolucionar la solución.' },
+] as const;
+---
+<Base title="Consulting · Business Intelligence y Power BI" description="Prometeo Consulting implementa dashboards ejecutivos, automatización de reportes e integración de datos con Power BI para empresas en Bolivia.">
+  <section class="page-hero" aria-labelledby="h">
+    <div class="container">
+      <p class="badge-line"><Icon name="chart" />Prometeo Consulting</p>
+      <h1 id="h">Business Intelligence que tu gerencia <span class="gradient-text">sí usa</span></h1>
+      <p class="lead">Implementamos dashboards ejecutivos, automatizamos reportes e integramos tus sistemas con Power BI, desde el diagnóstico hasta el soporte.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href={bookingLink()} target="_blank" rel="noopener"><Icon name="calendar" />Agendar reunión</a>
+        <a class="btn btn-ghost" href="#propuesta"><Icon name="download" />Ver propuesta comercial</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="sol">
+    <div class="container">
+      <SectionHead id="sol" center eyebrow="¿Qué hacemos?" icon="layers" title="Nuestras soluciones"
+        lead="Cubrimos todo el ciclo de inteligencia de negocio: de la integración de datos a la visualización ejecutiva y el soporte." />
+      <div class="grid grid-3">
+        {services.map((s) => (
+          <article class="card reveal">
+            <div class="icon-chip"><Icon name={s.icon} /></div>
+            <h3>{s.t}</h3>
+            <p>{s.d}</p>
+            {'tags' in s && <div class="tags">{s.tags.map((t) => <span class="tag">{t}</span>)}</div>}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" aria-labelledby="port">
+    <div class="container">
+      <SectionHead id="port" center eyebrow="Portafolio" icon="presentation" title="Algunos de nuestros desarrollos"
+        lead="Dashboards en producción para clientes de distintos sectores. Los datos sensibles se muestran con autorización." />
+      <div class="grid grid-2">
+        {work.map((w) => (
+          <figure class="work card reveal">
+            <div class="work-img"><Image src={w.img} alt={`Captura: ${w.t}`} widths={[560, 900]} sizes="(max-width: 960px) 92vw, 560px" /></div>
+            <figcaption>
+              <span class="tag">{w.area}</span>
+              <h3>{w.t}</h3>
+              <p>{w.d}</p>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="met">
+    <div class="container">
+      <SectionHead id="met" center eyebrow="Cómo trabajamos" icon="workflow" title="Nuestra metodología"
+        lead="Un proceso estructurado y colaborativo, con entregas validadas en cada etapa." />
+      <ol class="steps">
+        {steps.map((s, i) => (
+          <li class="reveal">
+            <span class="node"><Icon name={s.icon} /><span class="num">{i + 1}</span></span>
+            <h3>{s.t}</h3>
+            <p>{s.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section id="planes" class="section section-alt" aria-labelledby="pl">
+    <div class="container">
+      <SectionHead id="pl" center eyebrow="Modalidades de trabajo" icon="coins" title="Elige cómo trabajar con nosotros"
+        lead="Dos modalidades claras, más un soporte mensual opcional." />
+      <Plans />
+    </div>
+  </section>
+
+  <Proposal />
+  <Clients />
+  <CtaBand title="¿Hablamos de tu proyecto de BI?" lead="En una reunión de 30 minutos entendemos tu necesidad y te decimos qué modalidad te conviene." />
+</Base>
+
+<style>
+  .work { padding: 0; margin: 0; }
+  .work-img { aspect-ratio: 16 / 9; overflow: hidden; background: var(--gray-light); }
+  .work-img :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: top left; transition: transform .5s ease; }
+  .work:hover .work-img :global(img) { transform: scale(1.04); }
+  figcaption { padding: 22px 26px 26px; }
+  figcaption h3 { margin-top: 12px; }
+
+  .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; position: relative; }
+  .steps::before { content: ''; position: absolute; top: 36px; left: 8%; right: 8%; height: 2px; background: linear-gradient(90deg, var(--purple-light), var(--purple), var(--purple-light)); }
+  .steps li { text-align: center; position: relative; }
+  .node { width: 72px; height: 72px; margin: 0 auto 18px; border-radius: 50%; background: #fff; border: 2px solid var(--purple); color: var(--purple); display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 0 0 8px #fff, var(--shadow-md); }
+  .num { position: absolute; top: -6px; right: -6px; width: 26px; height: 26px; border-radius: 50%; background: var(--purple); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .steps h3 { font-size: 16px; margin-bottom: 8px; }
+  .steps p { font-size: 14px; color: var(--gray-mid); }
+  @media (max-width: 1000px) {
+    .steps { grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 32px; }
+    .steps::before { display: none; }
+  }
+</style>

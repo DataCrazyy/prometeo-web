@@ -1,0 +1,117 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import SectionHead from '../components/SectionHead.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { waLink } from '../data/site';
+
+// Catálogo de cursos — edita duración, modalidad y precio cuando los tengas.
+const courses = [
+  {
+    level: 'Inicial', t: 'Power BI desde cero', icon: 'chart',
+    d: 'Conecta tus datos, crea tus primeros reportes y publícalos para tu equipo.',
+    meta: ['[16] horas', 'Presencial o virtual', 'Certificado'],
+    topics: ['Power Query', 'Modelo de datos', 'Visualizaciones', 'Publicación'],
+  },
+  {
+    level: 'Intermedio', t: 'DAX y modelado para negocio', icon: 'database',
+    d: 'Medidas, inteligencia de tiempo y modelos que responden preguntas de gerencia.',
+    meta: ['[20] horas', 'Presencial o virtual', 'Proyecto final'],
+    topics: ['DAX', 'Inteligencia de tiempo', 'Modelo estrella', 'Rendimiento'],
+  },
+  {
+    level: 'Avanzado', t: 'Dashboards ejecutivos con IA', icon: 'bot',
+    d: 'Diseño de tableros para la toma de decisiones y uso de IA en el análisis.',
+    meta: ['[12] horas', 'Taller práctico', 'Casos reales'],
+    topics: ['Storytelling', 'UX de dashboards', 'Copilot e IA', 'Automatización'],
+  },
+] as const;
+
+const formats = [
+  {
+    icon: 'graduation', t: 'Prometeo Student', who: 'Universidades y estudiantes',
+    d: 'Programas para pregrado, posgrado y diplomados, alineados al plan académico.',
+  },
+  {
+    icon: 'building', t: 'Prometeo Enterprise', who: 'Empresas',
+    d: 'Capacitación in-company con los datos y casos de tu propia empresa.',
+  },
+  {
+    icon: 'users', t: 'Cursos abiertos', who: 'Profesionales',
+    d: 'Grupos reducidos con fechas publicadas. [Próximas fechas por confirmar]',
+  },
+] as const;
+
+const taught = ['Universidad Católica Boliviana · Posgrado', 'Industrias Venado', 'Nexocorp', '[Universidad Gabriel René Moreno]'];
+---
+<Base title="Academy · Cursos de Power BI y análisis de datos" description="Prometeo Academy ofrece cursos de Power BI, DAX y dashboards ejecutivos para universidades, empresas y profesionales en Bolivia.">
+  <section class="page-hero academy-hero" aria-labelledby="h">
+    <div class="container">
+      <p class="badge-line"><Icon name="graduation" />Prometeo Academy</p>
+      <h1 id="h">Aprende Power BI con quienes lo <span class="gradient-text">implementan cada día</span></h1>
+      <p class="lead">Cursos y talleres prácticos para universidades, empresas y profesionales, con casos reales de proyectos en Bolivia.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#cursos">Ver cursos<Icon name="arrow-right" /></a>
+        <a class="btn btn-ghost" href={waLink('Hola, quiero el temario de los cursos de Prometeo Academy.')} target="_blank" rel="noopener"><Icon name="message" />Pedir temario</a>
+      </div>
+      <ul class="taught" aria-label="Dónde hemos enseñado">
+        <li class="taught-label">Hemos enseñado en:</li>
+        {taught.map((t) => <li>{t}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section id="cursos" class="section" aria-labelledby="cur">
+    <div class="container">
+      <SectionHead id="cur" center eyebrow="Cursos" icon="book" title="Elige tu nivel"
+        lead="Tres cursos que se pueden tomar por separado o como ruta completa." />
+      <div class="grid grid-3">
+        {courses.map((c) => (
+          <article class="course card reveal">
+            <div class="course-top"><span class="icon-chip"><Icon name={c.icon} /></span><span class="level">{c.level}</span></div>
+            <h3>{c.t}</h3>
+            <p>{c.d}</p>
+            <ul class="meta">{c.meta.map((m) => <li><Icon name="check" size={15} />{m}</li>)}</ul>
+            <div class="tags">{c.topics.map((t) => <span class="tag">{t}</span>)}</div>
+            <a class="btn btn-outline" href={waLink(`Hola, quiero información del curso "${c.t}".`)} target="_blank" rel="noopener">Quiero este curso</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" aria-labelledby="fmt">
+    <div class="container">
+      <SectionHead id="fmt" center eyebrow="Formatos" icon="layers" title="Para instituciones, empresas y personas" />
+      <div class="grid grid-3">
+        {formats.map((f) => (
+          <article class="card reveal">
+            <div class="icon-chip"><Icon name={f.icon} /></div>
+            <p class="who">{f.who}</p>
+            <h3>{f.t}</h3>
+            <p>{f.d}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="¿Quieres llevar un curso a tu institución?" lead="Armamos el programa según tu público, horas disponibles y nivel de partida." />
+</Base>
+
+<style>
+  .academy-hero { background: linear-gradient(135deg, #1A0E3B 0%, #1F2A6B 55%, #1A0E3B 100%); }
+  .taught { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; margin-top: 44px; align-items: center; }
+  .taught li { font-size: 13px; padding: 7px 14px; border-radius: 50px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); color: rgba(255,255,255,.88); }
+  .taught .taught-label { background: none; border: 0; padding-left: 0; color: rgba(255,255,255,.6); }
+  .course { display: flex; flex-direction: column; }
+  .course .icon-chip { margin: 0; background: var(--c-academy-bg); color: var(--c-academy); }
+  .course:hover .icon-chip { background: var(--c-academy); color: #fff; }
+  .course-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .level { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--c-academy); }
+  .meta { list-style: none; margin: 18px 0 4px; display: flex; flex-direction: column; gap: 6px; }
+  .meta li { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--gray-dark); }
+  .meta :global(svg) { color: var(--c-academy); }
+  .course .btn { margin-top: 24px; }
+  .who { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--purple-dark) !important; margin-bottom: 6px; }
+</style>
