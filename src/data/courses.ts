@@ -129,7 +129,7 @@ export const courses: Course[] = [
 
 // Historial de cursos dictados y alianzas (edita y agrega)
 export const history = [
-  { status: 'Próximamente', title: 'Nueva cohorte · Analista de datos con Power BI + Inteligencia Artificial', place: 'Santa Cruz · en vivo + virtual', when: 'Este 2026', upcoming: true },
+  { status: 'Próximamente', title: 'Nueva cohorte · Analista de datos con Power BI + Inteligencia Artificial', place: 'Santa Cruz · en vivo + virtual', when: 'Este 2026', upcoming: true, cert: true },
   { status: 'En curso', title: 'Experto en análisis de datos con Power BI (posgrado)', place: 'Universidad Autónoma Gabriel René Moreno (UAGRM)', when: '2026', ally: true },
   { status: 'En curso', title: 'Análisis de datos con Python (posgrado)', place: 'Universidad Católica Boliviana (UCB)', when: '2026', ally: true },
   { status: 'In-company', title: 'Capacitación en Power BI', place: 'Industrias Venado', when: '2025' },

@@ -2,22 +2,35 @@
 import { Image } from 'astro:assets';
 import venado from '../assets/clients/grupo-venado.png';
 import nexocorp from '../assets/clients/nexocorp.png';
-import cliente3 from '../assets/clients/cliente-3.png';
+import amarket from '../assets/clients/amarket.png';
+import farmacorp from '../assets/clients/farmacorp.png';
+import uagrm from '../assets/clients/uagrm.png';
 import SectionHead from './SectionHead.astro';
 
-// Agrega aquí más logos (PNG o SVG en src/assets/clients/)
-const logos = [
-  { src: venado, alt: 'Grupo Venado' },
-  { src: nexocorp, alt: 'Nexocorp' },
-  { src: cliente3, alt: '[Nombre del cliente 3]' },
+// Agrega aquí más logos (PNG sin fondo o SVG en src/assets/clients/). h = alto visual en px.
+const empresas = [
+  { src: venado, alt: 'Grupo Venado', h: 84 },
+  { src: nexocorp, alt: 'Nexocorp', h: 76 },
+  { src: farmacorp, alt: 'Farmacorp', h: 84 },
+  { src: amarket, alt: 'Amarket Minimarket', h: 44 },
+];
+const instituciones = [
+  { src: uagrm, alt: 'Universidad Autónoma Gabriel René Moreno (UAGRM)', h: 72 },
 ];
 ---
 <section class="section clients" aria-labelledby="clients-title">
   <div class="container">
-    <SectionHead id="clients-title" center eyebrow="Confianza" icon="handshake" title="Empresas que han confiado en nosotros" />
+    <SectionHead id="clients-title" center eyebrow="Confianza" icon="handshake" title="Empresas e instituciones que han confiado en nosotros" />
+    <p class="grp-t reveal">Empresas</p>
     <ul class="row reveal">
-      {logos.map((l) => (
-        <li><Image src={l.src} alt={l.alt} height={84} densities={[1, 2]} /></li>
+      {empresas.map((l) => (
+        <li><Image src={l.src} alt={l.alt} height={l.h} densities={[1, 2]} style={`height:${l.h}px`} /></li>
+      ))}
+    </ul>
+    <p class="grp-t reveal">Instituciones</p>
+    <ul class="row reveal">
+      {instituciones.map((l) => (
+        <li><Image src={l.src} alt={l.alt} height={l.h} densities={[1, 2]} style={`height:${l.h}px`} /></li>
       ))}
     </ul>
   </div>
@@ -25,7 +38,13 @@ const logos = [
 
 <style>
   .clients { padding: 80px 0; }
-  .row { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 56px; }
-  .row :global(img) { height: 84px; width: auto; filter: grayscale(1); opacity: .75; transition: filter var(--trans), opacity var(--trans), transform var(--trans); }
+  .grp-t { text-align: center; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gray-mid); margin: 8px 0 22px; }
+  .row { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 56px; margin-bottom: 44px; }
+  .row:last-child { margin-bottom: 0; }
+  .row :global(img) { width: auto; max-width: 100%; filter: grayscale(1); opacity: .7; transition: filter var(--trans), opacity var(--trans), transform var(--trans); }
   .row li:hover :global(img) { filter: none; opacity: 1; transform: scale(1.05); }
+  @media (max-width: 640px) {
+    .row { gap: 28px 36px; }
+    .row :global(img) { max-height: 60px; filter: none; opacity: 1; }
+  }
 </style>

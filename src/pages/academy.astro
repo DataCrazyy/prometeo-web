@@ -1,4 +1,5 @@
 ---
+import CertSeal from '../components/CertSeal.astro';
 import Mark from '../components/Mark.astro';
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
@@ -191,7 +192,8 @@ const faqSchema = {
         {history.map((h) => (
           <li class:list={['tl reveal', { up: h.upcoming }]}>
             <span class="tl-dot" aria-hidden="true"></span>
-            <div class="tl-card">
+            <div class:list={['tl-card', { 'has-cert': h.cert }]}>
+              {h.cert && <CertSeal />}
               <div class="tl-top"><span class="tl-status">{h.status}</span>{h.ally && <span class="tl-ally"><Icon name="handshake" size={13} />Alianza</span>}<span class="tl-when">{h.when}</span></div>
               <h3>{h.title}</h3>
               <p>{h.place}</p>
@@ -434,6 +436,13 @@ const faqSchema = {
   .tl.up .tl-status { background: var(--purple-soft); color: var(--ink); }
   .tl-ally { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--purple-dark); }
   .tl-when { margin-left: auto; font-size: 13px; color: var(--gray-mid); }
+  .tl-card.has-cert { position: relative; padding-right: 130px; }
+  .tl-card.has-cert :global(.cert) { position: absolute; right: 28px; top: 50%; transform: translateY(-50%); }
+  @media (max-width: 640px) {
+    .tl-card.has-cert { padding-right: 20px; padding-top: 86px; }
+    .tl-card.has-cert :global(.cert) { top: 18px; left: 18px; right: auto; transform: none; flex-direction: row; gap: 8px; }
+    .tl-card.has-cert :global(.cert svg) { width: 52px; height: 52px; }
+  }
   .tl.up .tl-when { color: rgba(255,255,255,.7); }
   .tl-card h3 { font-size: 18px; }
   .tl-card p { font-size: 15px; color: var(--gray-mid); }
