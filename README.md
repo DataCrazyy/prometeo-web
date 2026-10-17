@@ -74,6 +74,9 @@ npm run preview  # sirve /dist
 
 ## Publicar
 
+El sitio está en **https://techprometeo.com** (GitHub Pages con dominio propio; el archivo `public/CNAME` le dice a GitHub qué dominio usar). En el repositorio, las variables de Actions deben ser `SITE_URL=https://techprometeo.com` y `BASE_PATH=/`.
+
+
 ### Opción recomendada: Cloudflare Pages o Vercel (gratis, con dominio propio y HTTPS)
 1. Sube este repositorio a GitHub.
 2. En Cloudflare Pages o Vercel elige **Import from GitHub** y luego este repositorio.

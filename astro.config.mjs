@@ -5,7 +5,7 @@ import { defineConfig } from 'astro/config';
 // BASE: déjalo en '/' si usas dominio propio, Vercel, Netlify o Cloudflare Pages.
 //       Si publicas en https://<usuario>.github.io/<repo>/ sin dominio, pon '/<repo>/'.
 export default defineConfig({
-  site: process.env.SITE_URL ?? 'https://prometeo.example.com',
+  site: process.env.SITE_URL ?? 'https://techprometeo.com',
   base: process.env.BASE_PATH ?? '/',
   trailingSlash: 'ignore',
   build: { format: 'directory' },
